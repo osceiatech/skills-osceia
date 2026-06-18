@@ -1,1 +1,0 @@
-Medição e controle da complexidade do código. Esta skill foca em analisar a quantidade de caminhos de execução independentes que um bloco de código possui (estruturas como if, else, while, switch). A função prática é ensinar ou validar a habilidade de manter o código simples, modular, fácil de ler e fácil de testar, evitando funções gigantescas e aninhadas.
