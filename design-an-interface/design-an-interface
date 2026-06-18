@@ -1,0 +1,1 @@
+Foca na modelagem e arquitetura de software, especificamente na definição de contratos claros entre componentes (APIs, Interfaces ou Classes Abstratas). Avalia a capacidade de desacoplar o sistema, garantindo que a implementação interna possa mudar sem quebrar quem consome o componente.
