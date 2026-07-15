@@ -11,6 +11,29 @@ If the question is about logic/state rather than what something looks like — w
 - "Try a different layout for the settings screen."
 - Any time the user would otherwise spend a day picking between three vague mockups in their head.
 
+## Read the design direction before drawing variants
+
+Write a one-line **Design Read** before generating code:
+
+> "Reading this as: [surface] for [audience], where [primary job] matters most; the visual language should feel [qualities] while preserving [existing identity/constraints]."
+
+Infer it from the actual brief, surrounding product, brand assets, real content, and existing design system. Ask one focused question only when two materially different readings remain plausible. Accessibility, public-service, regulated, trust-first, child-safety, and low-bandwidth constraints override aesthetic novelty.
+
+Set three conversational dials to make the variants intentionally different:
+
+- **Variance (1-10):** conventional/symmetrical → experimental/asymmetrical.
+- **Motion (1-10):** static feedback → choreographed storytelling.
+- **Density (1-10):** spacious/editorial → information-dense/operational.
+
+Do not persist these as universal defaults. Choose values from the current audience and job, and state them with the Design Read. For trust-first/public-service surfaces, start restrained (roughly variance 3-4, motion 1-3) unless the brief clearly supports more expression. Density follows the task rather than the industry label.
+
+For an existing surface, declare the redesign mode:
+
+- **Preserve:** keep brand, information architecture, terminology, component system, and interaction contracts; explore hierarchy and composition within them.
+- **Overhaul:** permit a new visual direction, but preserve routes, data contracts, legal copy, accessibility, and user expectations unless the user explicitly expands scope.
+
+These are decision aids, not a substitute for taste or user feedback. Avoid category shortcuts such as "education means childish," "nonprofit means sentimental," or "technology means dark gradients."
+
 ## Two sub-shapes — strongly prefer sub-shape A
 
 A UI prototype is much easier to judge when it's **butting up against the rest of the app** — real header, real sidebar, real data, real density. A throwaway route on its own is a vacuum: every variant looks fine in isolation. Default to sub-shape A whenever there's a plausible existing page to host the variants. Only reach for sub-shape B if the prototype genuinely has no nearby home.
@@ -50,8 +73,13 @@ Draft each variant. Hold each one to:
 - The page's purpose and the data it has access to.
 - The project's component library / styling system (TailwindCSS, shadcn, MUI, plain CSS, whatever).
 - A clear exported component name, e.g. `VariantA`, `VariantB`, `VariantC`.
+- The Design Read, redesign mode, accessibility constraints, and real brand/content assets.
 
 Variants must be **structurally different** — different layout, different information hierarchy, different primary affordance, not just different colours. Three slightly-tweaked card grids isn't a UI prototype, it's wallpaper. If two drafts come out too similar, redo one with explicit "do not use a card grid" guidance.
+
+Give each variant a short thesis and dial values. Vary structure before decoration: one may optimize scanning, another narrative flow, another task completion. Do not force every option to be maximally novel. At least one should be a restrained, highly usable baseline.
+
+Do not introduce a new framework, component library, icon family, font dependency, animation library, generated image, stock asset, CDN, or third-party logo merely to make a variant look finished. Reuse the project stack and approved assets. If an external dependency or asset would materially change the decision, present it as an explicit optional experiment and obtain approval before adding it. Never fabricate customers, partners, testimonials, or institutional endorsements.
 
 ### 3. Wire them together
 
@@ -97,7 +125,7 @@ Surface the URL (and the `?variant=` keys). The user will flip through whenever 
 
 ### 6. Capture the answer and clean up
 
-Once a variant has won, write down which one and why (commit message, ADR, issue, or a `NOTES.md` next to the prototype if running AFK and the user hasn't responded yet). Then:
+Once a variant has won, write down which one and why (commit message, ADR, issue, or a `NOTES.md` next to the prototype if running AFK and the user hasn't responded yet). Capture the approved Design Read, dial values, constraints, and specific elements selected/rejected. If the project already has `DESIGN.md`, propose the corresponding update; do not silently turn a one-off preference into a permanent project rule. Then:
 
 - **Sub-shape A** — delete the losing variants and the switcher; fold the winner into the existing page.
 - **Sub-shape B** — promote the winning variant to a real route, delete the throwaway route and the switcher.
@@ -110,3 +138,9 @@ Don't leave variant components or the switcher lying around. They rot fast and c
 - **Sharing too much code between variants.** A shared `<Header>` is fine; a shared `<Layout>` defeats the point. Each variant should be free to throw out the layout.
 - **Wiring variants to real mutations.** Read-only prototypes are fine. If a variant needs to mutate, point it at a stub — the question is "what should this look like", not "does the backend work".
 - **Promoting the prototype directly to production.** The variant code was written under prototype constraints (no tests, minimal error handling). Rewrite it properly when you fold it in.
+- **Treating a style checklist as learned taste.** Dials and heuristics are hypotheses. The user's comparison and reasons are the evidence worth preserving.
+- **Replacing one monoculture with another.** Avoid generic AI defaults, but do not blindly replace them with a fixed set of fashionable fonts, asymmetric heroes, bento grids, or motion effects.
+
+## Influences
+
+The Design Read and dial concepts were adapted selectively from [Taste Skill](https://github.com/Leonxlnx/taste-skill) (MIT). This workflow intentionally excludes its framework defaults, hard aesthetic bans, mandatory imagery, and bundle installation. The local source of truth remains this file and the user's approved project decisions.
