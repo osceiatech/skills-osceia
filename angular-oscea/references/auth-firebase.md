@@ -1,6 +1,8 @@
 # Autenticação Firebase — Angular OSCEA
 
-**Único provider de autenticação permitido.** Não usar MSAL, Azure AD ou qualquer outro.
+**Usar apenas em projetos públicos** (cidadãos, candidatos, uso externo — ex.: osceia-camara,
+osceia-app). Para projetos de uso interno (colaboradores OSCEA), ver `references/auth-azure-ad.md`.
+Um mesmo app Angular usa **um único provider**, nunca os dois.
 
 ---
 

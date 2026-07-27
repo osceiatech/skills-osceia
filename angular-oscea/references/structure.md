@@ -61,14 +61,18 @@ features/[nome-da-feature]/
 ```text
 core/
 ├── auth/
-│   ├── firebase-auth.service.ts
-│   ├── firebase-auth.service.spec.ts
+│   ├── firebase-auth.service.ts   # projetos públicos — ver references/auth-firebase.md
+│   │   (ou azure-auth.service.ts para projetos internos — ver references/auth-azure-ad.md)
 │   ├── auth.guard.ts
-│   └── auth.interceptor.ts
+│   └── auth.interceptor.ts        # não existe no Azure AD — MsalInterceptor cobre isso
+├── graphql/
+│   └── [entidade].queries.ts       # Queries/mutations do Twenty CRM — ver references/twenty-crm.md
 ├── services/
-│   └── [nome]-api.service.ts   # Services globais de API
+│   ├── edge-functions.service.ts   # invoca Edge Functions do Supabase
+│   ├── twenty.service.ts           # proxy GraphQL para o Twenty CRM
+│   └── [nome]-api.service.ts       # outros services globais de API
 └── utils/
-    └── [nome].util.ts           # Funções puras utilitárias
+    └── [nome].util.ts               # Funções puras utilitárias
 ```
 
 **Regra:** nada em `core/` deve ser lazy loaded. É carregado com o app.
@@ -116,7 +120,7 @@ export interface PaginatedResponse<T> extends ApiResponse<T[]> {
 
 ---
 
-## `app.config.ts` Completo
+## `app.config.ts` Completo (projeto público — Firebase)
 
 ```typescript
 import { ApplicationConfig } from '@angular/core';
@@ -126,6 +130,7 @@ import { provideExperimentalZonelessChangeDetection } from '@angular/core';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { providePrimeNG } from 'primeng/config'; // somente se PrimeNG estiver no projeto
+import Aura from '@primeuix/themes/aura';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/auth/auth.interceptor';
 import { environment } from '../environments/environment';
@@ -137,10 +142,14 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
-    // providePrimeNG({ ... }),  // descomentar se usar PrimeNG
+    // providePrimeNG({ theme: { preset: Aura } }),  // descomentar se usar PrimeNG
   ],
 };
 ```
+
+> Para projetos internos (Azure AD/MSAL), ver o `app.config.ts` completo em
+> `references/auth-azure-ad.md` — os providers de auth mudam, o resto (zoneless,
+> router, PrimeNG) é igual.
 
 ---
 
@@ -159,13 +168,19 @@ Antes de submeter qualquer PR, verifique:
 - [ ] Nenhum `any` no TypeScript
 - [ ] Signals usam `.set()` ou `.update()`, nunca `.mutate()`
 
-**Firebase**
-- [ ] Autenticação passa pelo `FirebaseAuthService`, nunca chama o SDK diretamente
-- [ ] `idToken` injetado via `authInterceptor`, nunca manualmente nos services
+**Autenticação (Firebase ou Azure AD, conforme o projeto)**
+- [ ] Autenticação passa pelo `FirebaseAuthService`/`AzureAuthService`, nunca chama o SDK diretamente no componente
+- [ ] Token injetado via interceptor (`authInterceptor` no Firebase, `MsalInterceptor` no Azure AD), nunca manualmente nos services
+- [ ] Projeto usa **um único** provider de auth — nunca Firebase e Azure AD juntos no mesmo app
 
 **Supabase**
 - [ ] Nenhum componente chama o cliente Supabase diretamente — sempre via service
-- [ ] Tipos inferidos do Drizzle schema — sem `any` nos retornos
+- [ ] Tipos das entidades definidos em `core/types/` (ou gerados via `supabase gen types`) — sem `any` nos retornos
 - [ ] IDs tratados como `string` (UUID), nunca `parseInt()`
 - [ ] `numeric`/`date` do PostgREST convertidos corretamente onde necessário
 - [ ] Edge Functions com handler `OPTIONS` como primeiro bloco
+- [ ] Nome da Edge Function segue o prefixo do domínio do projeto (`cam-`, `mkt-`, `oapp-`, etc.)
+
+**Twenty CRM**
+- [ ] Nenhum componente/service de feature monta GraphQL inline — sempre via `core/graphql/` + `TwentyService`
+- [ ] Twenty CRM nunca é chamado direto do browser — sempre via Edge Function proxy

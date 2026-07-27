@@ -9,8 +9,6 @@ Armazena dados que **não vão para o Twenty CRM** (documentos, registros operac
 
 ```bash
 npm install @supabase/supabase-js
-npm install drizzle-orm
-npm install -D drizzle-kit
 ```
 
 **Não instalar:**
@@ -102,30 +100,27 @@ const { data } = await this.supabase.schema('outro_schema').from('tabela').selec
 
 ---
 
-## 4. Tipagem com Drizzle ORM
+## 4. Tipagem do Schema
 
-O Drizzle é a **fonte de verdade dos tipos**. Nunca usar `any` nos retornos do Supabase.
+Não há um ORM/gerador de tipos obrigatório. Defina as interfaces manualmente em
+`core/types/` (ou `models/` da feature) — nunca usar `any` nos retornos do Supabase.
+Se o schema for grande e mudar com frequência, considere gerar os tipos com a CLI do
+Supabase (`supabase gen types typescript --schema oscea`), mas isso é opcional por projeto.
 
 ```typescript
-// drizzle/schema.ts
-import { pgSchema, uuid, text, timestamp, numeric } from 'drizzle-orm/pg-core';
+// src/app/core/types/database.types.ts
+export interface Documento {
+  id: string;
+  titulo: string;
+  descricao: string | null;
+  valor: string;          // numeric retorna string no PostgREST
+  dataEmissao: string;    // date retorna string YYYY-MM-DD
+  status: string;
+  createdAt: string;      // timestamp ISO 8601
+  updatedAt: string;
+}
 
-export const osceaSchema = pgSchema('oscea');
-
-export const documentos = osceaSchema.table('documentos', {
-  id:          uuid('id').defaultRandom().primaryKey(),
-  titulo:      text('titulo').notNull(),
-  descricao:   text('descricao'),
-  valor:       numeric('valor'),          // retorna string no PostgREST
-  dataEmissao: text('data_emissao'),      // date retorna string YYYY-MM-DD
-  status:      text('status').notNull(),
-  createdAt:   timestamp('created_at').defaultNow().notNull(),
-  updatedAt:   timestamp('updated_at').defaultNow().notNull(),
-});
-
-// Tipos inferidos — usar em todo o projeto
-export type Documento = typeof documentos.$inferSelect;
-export type InsertDocumento = typeof documentos.$inferInsert;
+export type InsertDocumento = Omit<Documento, 'id' | 'createdAt' | 'updatedAt'>;
 ```
 
 > **Tipos PostgREST a lembrar:**
@@ -133,12 +128,6 @@ export type InsertDocumento = typeof documentos.$inferInsert;
 > - `date` → `string` (`'YYYY-MM-DD'`) — usar `new Date(valor)` onde precisar de objeto Date
 > - `timestamp` → `string` ISO 8601
 > - `uuid` → `string` — nunca `parseInt()`
-
-Caminho de reexportação:
-```typescript
-// src/app/core/types/database.types.ts
-export type * from '../../../../drizzle/schema';
-```
 
 ---
 
@@ -442,7 +431,7 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA oscea
 ALTER DEFAULT PRIVILEGES IN SCHEMA oscea
   GRANT ALL ON SEQUENCES TO anon, authenticated, service_role;
 
--- Desabilitar RLS (auth é feita pelo Firebase, não pelo Supabase)
+-- Desabilitar RLS (auth é feita pelo Firebase ou Azure AD, não pelo Supabase Auth)
 DO $$
 DECLARE r RECORD;
 BEGIN
@@ -453,8 +442,10 @@ BEGIN
 END $$;
 ```
 
-> **Por que desabilitar RLS?** O projeto usa Firebase Auth, não Supabase Auth.
-> RLS do Supabase só agrega valor com autenticação nativa do Supabase.
+> **Por que desabilitar RLS?** O projeto usa Firebase Auth ou Azure AD, não Supabase Auth.
+> RLS do Supabase só agrega valor com autenticação nativa do Supabase. O isolamento por
+> usuário é feito no service da aplicação (ex.: filtrando sempre por `firebase_uid` ou
+> pelo `oid`/`sub` do token Azure AD nas queries).
 
 ---
 
@@ -465,7 +456,7 @@ END $$;
 - [ ] Schema `oscea` adicionado ao `PGRST_DB_SCHEMAS` no servidor
 - [ ] Container PostgREST reiniciado após configuração
 - [ ] SQL de permissões + disable RLS rodado no SQL Editor
-- [ ] Drizzle schema em `drizzle/schema.ts` com tipos exportados
+- [ ] Tipos das entidades definidos em `core/types/` (manual ou gerado via `supabase gen types`)
 - [ ] Services de dados em `features/[feature]/services/` — sem chamadas diretas em componentes
 - [ ] Stores em `features/[feature]/store/` usando signals
 

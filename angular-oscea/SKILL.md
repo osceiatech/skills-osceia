@@ -1,29 +1,39 @@
 ---
 name: angular-oscea
 description: >
-  Padrões e diretrizes para desenvolvimento Angular na OSCEA (Secretaria).
+  Padrões e diretrizes para desenvolvimento Angular na OSCEA (Secretaria) e para a
+  governança de projetos, do levantamento de requisitos ao deploy.
   Use esta skill SEMPRE que o usuário pedir para criar, editar ou revisar qualquer
   componente, serviço, diretiva, rota, guard, interceptor ou qualquer arquivo Angular
-  dentro do contexto do projeto da OSCEA / Secretaria.
-  Também use ao configurar autenticação Firebase, integração com Supabase (banco auxiliar),
-  Edge Functions, estilização com Tailwind 4 + PrimeNG, estrutura de pastas, lazy loading,
-  signals, zoneless change detection, ou acessibilidade (AXE / WCAG AA).
+  dentro do contexto de um projeto da OSCEA / Secretaria.
+  Também use ao configurar autenticação (Firebase para projetos públicos, Azure AD/MSAL
+  para projetos de uso interno), integração com Supabase self-hosted (banco auxiliar),
+  integração com o Twenty CRM via Edge Functions, Edge Functions e a convenção de prefixo
+  por projeto do repositório osceia-api, estilização com Tailwind 4 + PrimeNG, estrutura
+  de pastas, lazy loading, signals, zoneless change detection, acessibilidade (AXE / WCAG AA)
+  ou o fluxo de governança do projeto (pesquisa/BPMN → grill-me → tlc-spec-driven →
+  gh-issue-dor-dod/gh-issue → implementação).
   Frases que disparam esta skill: "cria um componente", "novo serviço", "estrutura de pastas",
-  "feature de", "rota lazy", "autenticação firebase", "guard", "interceptor", "signal",
-  "OnPush", "zoneless", "tailwind", "primeng", "concafras", "acessibilidade", "axe", "wcag",
-  "supabase", "banco auxiliar", "edge function", "twenty crm", "drizzle".
+  "feature de", "rota lazy", "autenticação", "guard", "interceptor", "signal", "OnPush",
+  "zoneless", "tailwind", "primeng", "acessibilidade", "axe", "wcag", "supabase",
+  "banco auxiliar", "edge function", "twenty crm", "msal", "firebase", "azure ad",
+  "governança", "spec", "issue", "dor", "dod".
 ---
 
 # Angular OSCEA — Padrões e Diretrizes
 
-Este documento define **como escrever código Angular** nos projetos da OSCEA (Secretaria).
-Toda geração de código deve seguir estas regras sem exceção.
+Este documento define **como escrever código Angular** e **como conduzir um projeto**
+nos projetos da OSCEA (Secretaria). Toda geração de código e todo fluxo de trabalho
+deve seguir estas regras sem exceção.
 
-Para templates e exemplos detalhados, consulte os arquivos em `references/`:
+Para templates, exemplos e detalhes, consulte os arquivos em `references/`:
 - `references/component-templates.md` — Componente, serviço, guard, interceptor, form
-- `references/auth-firebase.md` — Autenticação Firebase (fluxo completo)
+- `references/auth-firebase.md` — Autenticação Firebase (projetos públicos)
+- `references/auth-azure-ad.md` — Autenticação Azure AD / MSAL (projetos internos)
 - `references/supabase.md` — Integração Supabase: SupabaseService, stores, Edge Functions
+- `references/twenty-crm.md` — Integração com o Twenty CRM e convenção de prefixos do osceia-api
 - `references/structure.md` — Estrutura de pastas, nomenclatura, checklist de PR
+- `references/governance-hooks.md` — Hooks do Claude Code para as regras de governança (`hooks/`)
 
 ---
 
@@ -33,12 +43,11 @@ Para templates e exemplos detalhados, consulte os arquivos em `references/`:
 |---|---|---|
 | **Angular v20+** | Framework principal | Standalone é padrão; `standalone: true` NÃO deve ser declarado |
 | **TypeScript** | Linguagem | `strict: true` obrigatório |
-| **Firebase Auth** | Autenticação | Única solução de auth; sem MSAL/Azure AD |
+| **Firebase Auth** ou **Azure AD (MSAL)** | Autenticação | Escolha é **por projeto**, nunca as duas no mesmo app — ver seção 5 |
 | **Supabase (self-hosted)** | Banco auxiliar | Dados que não vão para o Twenty CRM |
-| **Drizzle ORM** | Tipagem do schema Supabase | Fonte de verdade dos tipos do banco |
+| **Twenty CRM** | CRM principal | Contatos, negócios e pipeline — acessado via Edge Function proxy GraphQL |
 | **Tailwind CSS 4** | Estilização primária | Sempre presente |
-| **PrimeNG** | UI Components | Opcional por projeto |
-| **Concafras UI** | Design system interno | Tokens de cor e tema da OSCEA |
+| **PrimeNG** | UI Components | Opcional por projeto; tema **Aura** via `@primeuix/themes` quando presente |
 | **Vitest** | Testes unitários | Não usar Karma/Jasmine |
 | **Zoneless** | Change detection | `provideExperimentalZonelessChangeDetection()` |
 
@@ -72,40 +81,34 @@ Para templates e exemplos detalhados, consulte os arquivos em `references/`:
 
 ---
 
-## 3. Arquitetura de Dados: Supabase como Banco Auxiliar
+## 3. Arquitetura de Dados: Twenty CRM + Supabase como Banco Auxiliar
 
-O Supabase self-hosted é o banco de dados auxiliar da OSCEA. Ele armazena **dados que
-não vão para o Twenty CRM** — tipicamente dados operacionais, uploads, logs e entidades
-internas de cada módulo.
-
-### Separação de responsabilidades
+A OSCEA usa **duas fontes de dados** com responsabilidades bem separadas:
 
 ```
 Twenty CRM          → contatos, negócios, pipeline comercial, relacionamentos
 Supabase (auxiliar) → dados operacionais, documentos, registros internos, uploads
 ```
 
-### Regras do SupabaseService
-
-- **Um único singleton** `SupabaseService` em `core/supabase.service.ts`
-- Componentes **nunca** chamam o cliente Supabase diretamente
-- Toda operação passa por um **serviço de dados** específico por entidade
-- Usar `inject(SupabaseService).client` nos services de dados
-
-### Tipagem
-
-- Drizzle ORM é a **fonte de verdade dos tipos** do schema Supabase
-- Nunca usar `any` nos retornos do Supabase — tipar com `InferSelectModel<typeof tabela>`
-- Tipos PostgREST importantes: `numeric` → `string`; `date` → `string`; `uuid` → `string`
+- Componentes **nunca** acessam Twenty CRM ou Supabase diretamente — sempre via um
+  serviço de dados específico.
+- Twenty CRM é acessado **exclusivamente via GraphQL, através de uma Edge Function
+  proxy** (nunca direto do browser — a API do Twenty não deve ser exposta no cliente).
+  Ver `references/twenty-crm.md` para o padrão completo (`TwentyService.graphql<T>()`,
+  queries em `core/graphql/[entidade].queries.ts`).
+- Supabase self-hosted é o **banco auxiliar**: um único singleton `SupabaseService`
+  em `core/supabase.service.ts`; toda operação passa por um serviço de dados por entidade.
+- Tipos das entidades: definidos manualmente em `core/types/` ou `models/` da feature.
 
 ### Schema customizado
 
-- Usar schema separado (ex: `oscea`) em vez de `public`
-- Configurar no cliente: `createClient(url, key, { db: { schema: 'oscea' } })`
+- Usar schema separado (ex: `oscea`, `camara`, `marketing`) em vez de `public`
+- Configurar no cliente: `createClient(url, key, { db: { schema: 'meu-schema' } })`
 - Em self-hosted, adicionar ao `PGRST_DB_SCHEMAS` no `docker-compose.yml` do servidor
 
 > Ver `references/supabase.md` para implementação completa de SupabaseService,
-> stores com signals, tipagem Drizzle e Edge Functions.
+> stores com signals e Edge Functions. Ver `references/twenty-crm.md` para a
+> integração com o Twenty CRM.
 
 ---
 
@@ -115,9 +118,10 @@ Supabase (auxiliar) → dados operacionais, documentos, registros internos, uplo
 src/
 ├── app/
 │   ├── core/
-│   │   ├── auth/                 # Firebase Auth — guards, serviço, interceptor
+│   │   ├── auth/                 # Firebase OU Azure AD — guards, serviço, interceptor
 │   │   ├── supabase.service.ts   # Singleton do cliente Supabase
-│   │   ├── services/             # API services globais
+│   │   ├── graphql/              # Queries/mutations do Twenty CRM (raw GraphQL strings)
+│   │   ├── services/             # API services globais (edge-functions.service.ts, twenty.service.ts)
 │   │   └── utils/                # Helpers globais (supabase-error.ts, etc.)
 │   │
 │   ├── layout/                   # Shell (header, sidebar, router-outlet)
@@ -134,7 +138,7 @@ src/
 │   │   └── [feature]/
 │   │       ├── components/       # Dumb components
 │   │       ├── pages/            # Smart components (gerenciam estado)
-│   │       ├── services/         # [entidade].service.ts — operações Supabase
+│   │       ├── services/         # [entidade].service.ts — operações Supabase/Twenty
 │   │       ├── store/            # [feature].store.ts — signals store
 │   │       └── [feature].routes.ts
 │   │
@@ -145,13 +149,10 @@ src/
 ├── supabase/
 │   ├── config.toml               # verify_jwt por função
 │   └── functions/
-│       ├── deno.json             # mapa de imports Deno
-│       ├── _shared/              # cors.ts, supabase.ts, auth.ts
-│       └── [nome-da-funcao]/
+│       ├── deno.json              # mapa de imports Deno
+│       ├── _shared/                # cors.ts, supabase.ts, auth.ts
+│       └── [prefixo]-[acao]/       # ex.: cam-create-inscricao — ver seção 11
 │           └── index.ts
-│
-├── drizzle/
-│   └── schema.ts                 # definição das tabelas — fonte de verdade dos tipos
 │
 ├── public/
 └── styles.css
@@ -161,32 +162,52 @@ src/
 
 ---
 
-## 5. Autenticação — Firebase
+## 5. Autenticação — Firebase (público) ou Azure AD/MSAL (interno)
 
-Auth usa **exclusivamente Firebase Authentication**. Nunca MSAL ou Azure AD.
+**A escolha do provider de auth é relativa ao tipo de projeto — nunca as duas no
+mesmo app:**
 
-Fluxo:
-1. `FirebaseAuthService` (`core/auth/`) encapsula o SDK, expõe `currentUser` como signal
-2. `authGuard` protege rotas privadas no nível do layout shell
-3. `authInterceptor` injeta o `idToken` do Firebase em todas as requisições HTTP
+| Tipo de projeto | Provider | Exemplos reais |
+|---|---|---|
+| **Público** — cidadãos, candidatos, uso externo | **Firebase Auth** | osceia-camara, osceia-app |
+| **Interno** — uso exclusivo de colaboradores OSCEA | **Azure AD / MSAL** | osceia-marketing, osceia-admin, osceia-contratos |
 
-> Ver `references/auth-firebase.md` para código completo.
+Ao iniciar um novo projeto Angular, pergunte (ou confirme no `.specs/project/PROJECT.md`)
+se o público-alvo é externo ou interno **antes** de configurar auth. Nunca assuma Firebase
+por padrão.
+
+- Projetos públicos: ver `references/auth-firebase.md` (`FirebaseAuthService`, `authGuard`,
+  `authInterceptor` injetando `idToken`).
+- Projetos internos: ver `references/auth-azure-ad.md` (`MsalService`, `MsalGuard`,
+  `MsalInterceptor` injetando o token do Azure AD).
+- Em ambos os casos: guard no nível do layout shell (não em cada feature), estado do
+  usuário exposto como signal, e o token é injetado automaticamente via interceptor —
+  services nunca lidam com o token manualmente.
 
 ---
 
 ## 6. Estilização
 
 ```css
-/* styles.css — ordem obrigatória */
-@import "concafras-ui/src/lib/assets/styles/tokens.css";
-@import "concafras-ui/src/lib/assets/styles/theme.css";
+/* styles.css */
 @import "tailwindcss";
 @layer tailwind-base, primeng, tailwind-utilities;
+
+/* Design Tokens — variáveis CSS próprias do projeto, nunca hardcode nos componentes */
+:root {
+  --color-primary-900: #0F3A22;
+  --color-primary-500: #3FA06D;
+  /* ... paleta definida por projeto */
+}
 ```
 
-- Tokens Concafras UI para cores da marca — nunca hardcode
-- Tailwind para layout e utilitários
-- PrimeNG opcional; quando presente, camada `primeng` entre base e utilities
+- Tailwind para layout e utilitários — sempre presente
+- Tokens de cor/tema em `:root` como CSS custom properties, definidos por projeto
+  (não existe um pacote de design system compartilhado — cada projeto define a própria
+  paleta em `styles.css`)
+- PrimeNG opcional; quando presente, usar o tema **Aura** via `@primeuix/themes` e
+  `providePrimeNG({ theme: { preset: Aura } })` no `app.config.ts`; camada `primeng`
+  entre `tailwind-base` e `tailwind-utilities`
 
 ---
 
@@ -233,3 +254,69 @@ export const routes: Routes = [
 - **Vitest** — não Karma, não Jasmine
 - `*.spec.ts` no mesmo diretório do arquivo testado
 - Foco: lógica de negócio nos services e stores; interações de usuário nos componentes
+
+---
+
+## 11. Edge Functions e Convenção de Prefixos (osceia-api)
+
+Todas as Edge Functions da OSCEA seguem a convenção **`[prefixo-do-projeto]-[acao]`**
+(kebab-case), documentada e consolidada no repositório `osceia-api`:
+
+| Prefixo | Domínio/Projeto |
+|---|---|
+| `cam-` | Câmara Municipal (osceia-camara) |
+| `mkt-` | Marketing Hub (osceia-marketing) |
+| `oapp-` | App de Vagas (osceia-app) |
+| `edu-` | Educação (consulta IES/escolas) |
+| `contratos-` | OSCEA Contratos |
+| *(sem prefixo)* | Projetos internos (`auth-me`, `upload`) |
+
+- Cada projeto Angular mantém suas próprias functions em `supabase/functions/` já
+  nomeadas com o prefixo correto (ex.: `cam-create-inscricao` dentro de osceia-camara).
+- O repositório `osceia-api` é a fonte consolidada de deploy multi-domínio (self-hosted
+  via SSH/SCP): `node scripts/deploy-functions.mjs --only <prefixo>` ou
+  `--fn <nome-da-funcao>` para hotfix pontual.
+- Nunca crie uma function sem prefixo de domínio, exceto utilitários genéricos já
+  estabelecidos (`upload`, `auth-me`).
+
+> Ver `references/twenty-crm.md` para o detalhe do proxy GraphQL do Twenty CRM
+> (`cam-sync-twenty` e equivalentes por domínio).
+
+---
+
+## 12. Governança de Projeto
+
+Todo projeto ou feature nova segue este fluxo, sem pular etapas:
+
+1. **Pesquisa e formação** — levantamento do processo (BPMN) ou do escopo do projeto.
+2. **`grill-me`** — stress-test do plano/design com o usuário até fechar entendimento.
+3. **`tlc-spec-driven`** — cria as specs (`spec.md`, `design.md`, `tasks.md`, `context.md`)
+   em `.specs/features/[feature]/` a partir do que foi decidido no grill.
+4. **`gh-issue-dor-dod`** — transforma as tasks em issues no GitHub,
+   aplicando os checklists de Definition of Ready e Definition of Done.
+5. **Implementação** — segue o `tasks.md`, com commits atômicos e verificação a cada passo.
+
+Todos os documentos gerados (specs, ADRs, PRDs, etc.) devem estar **em português**.
+Quando for necessário exportar um `.md` para PDF (ex.: para compartilhar com quem não
+usa Git), usar a skill `md-to-pdf`.
+
+Parte dessas regras (spec antes de codar, commits pequenos, lembrete de testes e2e e de
+rodar `cyclomatic-complexity`) tem hooks prontos em `hooks/` — ver
+`references/governance-hooks.md` para o que cada um faz e como ativar.
+
+---
+
+## 13. Fluxo de Git
+
+- Toda tarefa nasce de uma **branch** criada pelo responsável pela tarefa.
+- Ao concluir, o responsável abre o **PR** — nunca commit direto para revisão.
+- **Depois do go-live do projeto, nunca trabalhar diretamente na `main`.**
+- Commits atômicos, seguindo o `tasks.md` gerado pelo `tlc-spec-driven`.
+
+---
+
+## 14. Eficiência de Tokens
+
+- Priorize o **RTK** (Rust Token Killer — `rtk`) para operações de dev via CLI quando
+  disponível; é aplicado automaticamente via hook, então basta usar os comandos normais.
+- Use a skill `caveman` quando o usuário pedir modo compacto/menos tokens.

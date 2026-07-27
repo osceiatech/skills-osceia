@@ -117,6 +117,9 @@ export class DashboardService {
 
 ## Guard de Autenticação
 
+> Exemplo abaixo usa Firebase (projeto público). Para projeto interno (Azure AD/MSAL),
+> ver o guard e interceptor equivalentes em `references/auth-azure-ad.md`.
+
 ```typescript
 // core/auth/auth.guard.ts
 import { inject } from '@angular/core';
