@@ -6,6 +6,7 @@ Repositório central para o desenvolvimento, teste e integração de habilidades
 
 | Pasta | Tipo | Descrição |
 |---|---|---|
+| [`authenticated-web-system-reverse-engineering/`](./authenticated-web-system-reverse-engineering/) | Skill metodológica | Orquestra engenharia reversa segura de sistemas web autenticados com Playwright/CDP e Crawlee opcional, incluindo gates de somente leitura e LGPD |
 | [`speckit-preset-osceia/`](./speckit-preset-osceia/) | Preset Spec Kit | Localiza o [Spec Kit](https://github.com/github/spec-kit) para PT-BR com gates obrigatórios de Acessibilidade (WCAG 2.1 AA) e Privacidade (LGPD) |
 
 ## Uso rápido
