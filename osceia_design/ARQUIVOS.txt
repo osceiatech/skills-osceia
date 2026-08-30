@@ -1,0 +1,158 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    osceia-design - Arquivos Compilados                      ║
+║                     Skill de Design OSCEIA - v1.0                          ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+📦 ARQUIVOS DE INSTALAÇÃO
+═══════════════════════════════════════════════════════════════════════════
+
+1. osceia-design.tar.gz (20 KB)
+   └─ Arquivo compactado para macOS/Linux
+   └─ Contém: SKILL.md + README.md + scripts + referências
+   └─ Descompactar: tar -xzf osceia-design.tar.gz
+
+2. osceia-design.zip (24 KB)
+   └─ Arquivo compactado para Windows
+   └─ Contém: mesmo conteúdo do .tar.gz
+   └─ Descompactar: Use gerenciador de arquivos ou PowerShell
+
+3. install-osceia-design.sh (4.7 KB)
+   └─ Script automático para macOS/Linux
+   └─ Uso: bash install-osceia-design.sh [--global|--project]
+   └─ Já incluído no .tar.gz
+
+4. install-osceia-design.ps1 (4.4 KB)
+   └─ Script automático para Windows PowerShell
+   └─ Uso: powershell -ExecutionPolicy Bypass -File install-osceia-design.ps1
+   └─ Já incluído no .zip
+
+5. INSTALACAO.md (6.6 KB)
+   └─ Guia completo de instalação
+   └─ Passo a passo detalhado + troubleshooting
+   └─ Já incluído nos arquivos compactados
+
+6. LEIA-ME.md (este documento de início rápido)
+   └─ Resumo rápido em 3 passos
+   └─ Como descompactar e instalar
+
+═══════════════════════════════════════════════════════════════════════════
+
+📄 ARQUIVOS DENTRO DO PACOTE DESCOMPACTADO
+═══════════════════════════════════════════════════════════════════════════
+
+Ao descompactar (tar ou zip), você terá:
+
+osceia-design/
+├── SKILL.md (12 KB)
+│   └─ Núcleo da skill com 23 comandos
+│   └─ Princípios, padrões, checklist
+│   └─ Referência completa para desenvolvedores
+
+├── README.md (6.2 KB)
+│   └─ Como instalar e usar
+│   └─ Informações de versão e licença
+│   └─ Integração com outras skills
+
+├── INSTALACAO.md (6.6 KB)
+│   └─ Guia passo a passo
+│   └─ Seção troubleshooting
+│   └─ Instruções para atualizar
+
+├── install-osceia-design.sh (4.7 KB)
+│   └─ Script automático para Unix/Linux
+│   └─ Detecta SO e cria diretórios
+│   └─ Copia arquivos para ~/.claude/skills/
+
+├── install-osceia-design.ps1 (4.4 KB)
+│   └─ Script automático para Windows
+│   └─ Suporta escopos global/projeto
+│   └─ Interface amigável com cores
+
+├── references/
+│   ├── tokens.css (7.8 KB)
+│   │   └─ Paleta CSS OSCEIA
+│   │   └─ Cores, tipografia, spacing, shadows
+│   │   └─ Ready to import em projetos Tailwind
+│   │
+│   └── exemplos-uso.md (12 KB)
+│       └─ 4 casos de uso reais:
+│       │  1. Componente LoginForm Angular
+│       │  2. Boletim Escolar Word
+│       │  3. Processo BPMN
+│       │  4. Auditoria de Projeto
+│       └─ Code samples + fluxos completos
+
+└── assets/
+    └── OSCEIA.config.json (2.1 KB)
+        └─ Configuração padrão
+        └─ Colors, fonts, frameworks
+        └─ Paths e settings
+
+═══════════════════════════════════════════════════════════════════════════
+
+🚀 QUICK START
+═══════════════════════════════════════════════════════════════════════════
+
+1. Descompacte o arquivo (tar.gz ou zip)
+2. Entre na pasta: cd osceia-design
+3. Execute o instalador:
+   - macOS/Linux: bash install-osceia-design.sh
+   - Windows:     powershell -ExecutionPolicy Bypass -File install-osceia-design.ps1
+4. Reinicie seu IDE (Claude Code, Cursor, GitHub Copilot)
+5. Digite /osceia-design no seu IDE
+
+═══════════════════════════════════════════════════════════════════════════
+
+📊 CONTEÚDO TOTAL
+═══════════════════════════════════════════════════════════════════════════
+
+Tamanho: ~50 KB (descompactado)
+Arquivos: 9 arquivos principais + subdiretórios
+Formato: Markdown + CSS + JSON + Shell Scripts + PowerShell
+Linguagem: Português (instruções e documentação)
+Compatibilidade: Windows + macOS + Linux
+
+═══════════════════════════════════════════════════════════════════════════
+
+✨ O QUE VOCÊ INSTALA
+═══════════════════════════════════════════════════════════════════════════
+
+Uma skill profissional com:
+
+✅ 23 comandos de design integrados
+✅ Padrões OSCEIA definidos (#003368, #008036)
+✅ Suporte para Angular 20+ + PrimeNG + Tailwind
+✅ Geração de documentos Word/PDF
+✅ Mapeamento de processos BPMN 2.0
+✅ Validação automática WCAG 2.1 AA
+✅ Integração com outras skills OSCEIA
+✅ Documentação completa com exemplos
+
+═══════════════════════════════════════════════════════════════════════════
+
+🎯 PRÓXIMOS PASSOS
+═══════════════════════════════════════════════════════════════════════════
+
+1. Leia LEIA-ME.md para quick start (3 passos)
+2. Descompacte o arquivo apropriado (tar.gz ou zip)
+3. Execute o instalador automático
+4. Reinicie o IDE
+5. Teste: /osceia-design init
+
+═══════════════════════════════════════════════════════════════════════════
+
+📞 SUPORTE
+═══════════════════════════════════════════════════════════════════════════
+
+Dentro do pacote:
+• INSTALACAO.md - Seção completa de troubleshooting
+• referencias/exemplos-uso.md - Casos de uso com solutions
+• SKILL.md - Referência técnica completa
+
+═══════════════════════════════════════════════════════════════════════════
+
+Skill osceia-design v1.0
+Criada com base no Impeccable Framework
+Agosto 2026 | OSCEIA
+
+Pronta para instalar! 🎨✨
