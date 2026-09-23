@@ -1,0 +1,355 @@
+/**
+ * OSCEIA Design Tokens
+ * Paleta de cores, tipografia e spacing para todos os projetos
+ * Use como base para Tailwind, PrimeNG e documentos
+ */
+
+:root {
+  /* ============================================
+     COLORS - Paleta Principal OSCEIA
+     ============================================ */
+  
+  /* Core Brand Colors */
+  --color-blue-osceia: #003368;      /* Azul corporativo - use para primary actions */
+  --color-green-osceia: #008036;     /* Verde institucional - use para success/secondary */
+  
+  /* Semantic Colors */
+  --color-primary: var(--color-blue-osceia);
+  --color-secondary: var(--color-green-osceia);
+  --color-success: #10B981;          /* Verde (mais claro que OSCEIA para accessibility) */
+  --color-warning: #F59E0B;          /* Âmbar para alertas */
+  --color-error: #DC2626;            /* Vermelho para erros */
+  --color-info: var(--color-blue-osceia);
+  
+  /* Neutrals - com tinta (nunca puro preto/cinza) */
+  --color-neutral-50: #F9FAFB;
+  --color-neutral-100: #F3F4F6;
+  --color-neutral-200: #E5E7EB;
+  --color-neutral-300: #D1D5DB;
+  --color-neutral-400: #9CA3AF;
+  --color-neutral-500: #6B7280;
+  --color-neutral-600: #4B5563;      /* Com tinta azul */
+  --color-neutral-700: #374151;
+  --color-neutral-800: #1F2937;      /* Tom de texto principal */
+  --color-neutral-900: #111827;
+  
+  /* Background Colors */
+  --color-bg-primary: #FFFFFF;
+  --color-bg-secondary: #F8F9FA;
+  --color-bg-tertiary: #F3F4F6;
+  --color-border: var(--color-neutral-200);
+  
+  /* Text Colors */
+  --color-text-primary: var(--color-neutral-800);
+  --color-text-secondary: var(--color-neutral-600);
+  --color-text-muted: var(--color-neutral-500);
+  --color-text-disabled: var(--color-neutral-400);
+  --color-text-inverse: #FFFFFF;
+  
+  /* ============================================
+     TYPOGRAPHY
+     ============================================ */
+  
+  /* Font Families - system fonts + fallback */
+  --font-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  --font-mono: 'SF Mono', Monaco, 'Inconsolata', monospace;
+  
+  /* Font Sizes - scale baseado em 16px */
+  --text-xs: 0.75rem;        /* 12px */
+  --text-sm: 0.875rem;       /* 14px */
+  --text-base: 1rem;         /* 16px */
+  --text-lg: 1.125rem;       /* 18px */
+  --text-xl: 1.25rem;        /* 20px */
+  --text-2xl: 1.5rem;        /* 24px */
+  --text-3xl: 1.875rem;      /* 30px */
+  --text-4xl: 2.25rem;       /* 36px */
+  --text-5xl: 3rem;          /* 48px */
+  
+  /* Font Weights */
+  --font-thin: 100;
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-extrabold: 800;
+  
+  /* Line Heights */
+  --leading-tight: 1.25;     /* Para headlines */
+  --leading-snug: 1.375;     /* Para subheadings */
+  --leading-normal: 1.5;     /* Para body text */
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+  
+  /* Letter Spacing (tracking) */
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
+  
+  /* ============================================
+     TYPOGRAPHY PRESETS
+     ============================================ */
+  
+  /* Headline 1 - Titles */
+  --heading-1-size: 2.25rem;         /* 36px */
+  --heading-1-weight: var(--font-bold);
+  --heading-1-height: var(--leading-tight);
+  --heading-1-tracking: var(--tracking-tighter);
+  
+  /* Headline 2 - Section titles */
+  --heading-2-size: 1.875rem;        /* 30px */
+  --heading-2-weight: var(--font-bold);
+  --heading-2-height: var(--leading-tight);
+  
+  /* Headline 3 - Subsection titles */
+  --heading-3-size: 1.5rem;          /* 24px */
+  --heading-3-weight: var(--font-semibold);
+  --heading-3-height: var(--leading-snug);
+  
+  /* Headline 4 */
+  --heading-4-size: 1.25rem;         /* 20px */
+  --heading-4-weight: var(--font-semibold);
+  --heading-4-height: var(--leading-snug);
+  
+  /* Body - Default text */
+  --body-size: 1rem;                 /* 16px */
+  --body-weight: var(--font-normal);
+  --body-height: var(--leading-normal);
+  
+  /* Body Small */
+  --body-small-size: 0.875rem;       /* 14px */
+  --body-small-weight: var(--font-normal);
+  --body-small-height: var(--leading-normal);
+  
+  /* Caption - Smallest, for metadata */
+  --caption-size: 0.75rem;           /* 12px */
+  --caption-weight: var(--font-medium);
+  --caption-height: var(--leading-tight);
+  
+  /* ============================================
+     SPACING - 4px base unit scale
+     ============================================ */
+  
+  --space-0: 0;
+  --space-1: 0.25rem;    /* 4px */
+  --space-2: 0.5rem;     /* 8px */
+  --space-3: 0.75rem;    /* 12px */
+  --space-4: 1rem;       /* 16px */
+  --space-5: 1.25rem;    /* 20px */
+  --space-6: 1.5rem;     /* 24px */
+  --space-8: 2rem;       /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+  
+  /* Padding Presets */
+  --padding-xs: var(--space-2);      /* 8px - compact */
+  --padding-sm: var(--space-3);      /* 12px - small inputs */
+  --padding-md: var(--space-4);      /* 16px - default */
+  --padding-lg: var(--space-6);      /* 24px - sections */
+  --padding-xl: var(--space-8);      /* 32px - containers */
+  
+  /* Gap/Margin Presets */
+  --gap-xs: var(--space-1);          /* 4px */
+  --gap-sm: var(--space-2);          /* 8px */
+  --gap-md: var(--space-3);          /* 12px */
+  --gap-lg: var(--space-4);          /* 16px */
+  --gap-xl: var(--space-6);          /* 24px */
+  --gap-2xl: var(--space-8);         /* 32px */
+  
+  /* ============================================
+     BORDERS & RADIUS
+     ============================================ */
+  
+  --border-radius-none: 0;
+  --border-radius-sm: 0.25rem;       /* 4px */
+  --border-radius-md: 0.5rem;        /* 8px */
+  --border-radius-lg: 0.75rem;       /* 12px */
+  --border-radius-xl: 1rem;          /* 16px */
+  --border-radius-full: 9999px;      /* Círculo */
+  
+  --border-width-thin: 1px;
+  --border-width-normal: 2px;
+  --border-width-thick: 4px;
+  
+  /* ============================================
+     SHADOWS
+     ============================================ */
+  
+  --shadow-none: none;
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
+  
+  /* Focus shadow (accessibility) */
+  --shadow-focus: 0 0 0 3px rgba(0, 51, 104, 0.1), 0 0 0 6px #003368;
+  
+  /* ============================================
+     TRANSITIONS & ANIMATIONS
+     ============================================ */
+  
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 350ms;
+  --duration-slower: 500ms;
+  
+  --easing-in: cubic-bezier(0.4, 0, 1, 1);
+  --easing-out: cubic-bezier(0, 0, 0.2, 1);
+  --easing-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Z-Index Scale */
+  --z-auto: auto;
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal: 400;
+  --z-popover: 500;
+  --z-tooltip: 600;
+  
+  /* ============================================
+     COMPONENT PRESETS
+     ============================================ */
+  
+  /* Button Base */
+  --button-height-sm: 2rem;          /* 32px */
+  --button-height-md: 2.5rem;        /* 40px */
+  --button-height-lg: 3rem;          /* 48px */
+  --button-padding-h: var(--space-4);
+  --button-radius: var(--border-radius-md);
+  --button-font-weight: var(--font-semibold);
+  
+  /* Input Base */
+  --input-height: 2.5rem;            /* 40px */
+  --input-padding-h: var(--space-3);
+  --input-padding-v: var(--space-2);
+  --input-radius: var(--border-radius-md);
+  --input-border: var(--border-width-thin) solid var(--color-border);
+  --input-font-size: var(--body-small-size);
+  
+  /* Card Base */
+  --card-padding: var(--space-6);
+  --card-radius: var(--border-radius-lg);
+  --card-shadow: var(--shadow-sm);
+  --card-border: var(--border-width-thin) solid var(--color-border);
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Typography utilities */
+.text-heading-1 {
+  font-size: var(--heading-1-size);
+  font-weight: var(--heading-1-weight);
+  line-height: var(--heading-1-height);
+  letter-spacing: var(--heading-1-tracking);
+}
+
+.text-heading-2 {
+  font-size: var(--heading-2-size);
+  font-weight: var(--heading-2-weight);
+  line-height: var(--heading-2-height);
+}
+
+.text-heading-3 {
+  font-size: var(--heading-3-size);
+  font-weight: var(--heading-3-weight);
+  line-height: var(--heading-3-height);
+}
+
+.text-body {
+  font-size: var(--body-size);
+  font-weight: var(--body-weight);
+  line-height: var(--body-height);
+}
+
+.text-body-small {
+  font-size: var(--body-small-size);
+  font-weight: var(--body-small-weight);
+  line-height: var(--body-small-height);
+}
+
+.text-caption {
+  font-size: var(--caption-size);
+  font-weight: var(--caption-weight);
+  line-height: var(--caption-height);
+}
+
+/* Color utilities */
+.text-primary {
+  color: var(--color-text-primary);
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.bg-primary {
+  background-color: var(--color-bg-primary);
+}
+
+.bg-secondary {
+  background-color: var(--color-bg-secondary);
+}
+
+/* Focus state (accessibility) */
+*:focus-visible {
+  outline: 2px solid var(--color-blue-osceia);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  box-shadow: var(--shadow-focus);
+}
+
+/* Accessible screen reader only text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Print styles */
+@media print {
+  :root {
+    --color-primary: #003368;
+    --color-secondary: #008036;
+  }
+  
+  body {
+    color: #000;
+    background: #fff;
+  }
+  
+  a {
+    text-decoration: underline;
+  }
+  
+  /* Hide interactive elements */
+  nav, .no-print {
+    display: none;
+  }
+}
