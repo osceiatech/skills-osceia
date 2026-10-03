@@ -44,8 +44,41 @@ A issue nasce de uma pesquisa, nunca do zero.
 1. Leia `.notebook/INDEX.md`. Se o assunto já foi pesquisado, use e atualize o arquivo existente.
 2. Senão, pesquise (código com arquivo:linha, decisões/ADRs, specs, docs externas) e grave em
    `.notebook/AAAA-MM-DD-<slug>.md`: pergunta, fontes, o que foi encontrado, conclusão.
-3. Acrescente a linha no `INDEX.md`: `- [Título](arquivo.md) · AAAA-MM-DD · #issue · resumo de uma linha`
+3. **Se for o caso, chame a skill `grill-me`** (ver abaixo) e grave o resultado no mesmo arquivo.
+4. Acrescente a linha no `INDEX.md`: `- [Título](arquivo.md) · AAAA-MM-DD · #issue · resumo de uma linha`
    (o `#issue` é preenchido na Fase 6, quando o número existir).
+
+#### Quando e como usar o `grill-me`
+
+Chame a skill `grill-me` quando a pesquisa mostrar:
+
+- decisão em aberto ou caminhos concorrentes (ex.: biblioteca A ou B, escopo maior ou menor);
+- termo ambíguo no pedido;
+- **contradição** entre o pedido, o código, as decisões (AD-xxx/ADRs), o `AGENTS.md` e as fontes externas
+  (ex.: o pedido diz "Ionic framework", mas o app já tem design system próprio).
+
+Como conduzir:
+
+- Uma pergunta por vez, cada uma com a recomendação do agente e o motivo.
+- Cada contradição é mostrada com a fonte de cada lado (arquivo:linha, link, decisão).
+- Quem decide é a pessoa. O agente nunca resolve uma contradição sozinho.
+- Pergunta sem resposta é **bloqueio**: a issue não é criada.
+
+Não chame quando a task é clara e não há decisão a tomar (ex.: bug com causa conhecida e correção óbvia).
+
+O resultado alimenta a pesquisa e a issue:
+
+```markdown
+## Decisões (grill-me)
+
+| Pergunta | Resposta | Contradição exposta |
+|---|---|---|
+| ... | ... | ... (ou —) |
+
+Em aberto: ... (se houver, a issue espera)
+```
+
+Cada decisão vai também para o **DOR** da issue (Fase 3).
 
 Se o repositório não usa `.notebook/`, pergunte ao usuário antes de criar a pasta.
 
@@ -58,7 +91,8 @@ Comum a qualquer issue:
 - [ ] Tipo definido: bug ou feature (define template, prefixo do título e label)
 - [ ] Título conciso e descritivo
 - [ ] Repositório alvo confirmado
-- [ ] Pesquisa registrada (Fase 1)
+- [ ] Pesquisa registrada (Fase 1), com as decisões do `grill-me` quando houve
+- [ ] Nenhuma pergunta ou contradição em aberto
 - [ ] Labels de escopo e assignees decididos (ou omitidos intencionalmente)
 
 Se for **bug**, exigir também:
@@ -167,6 +201,7 @@ gh issue close <n> --comment "..."           # fechar após DoD completo
 ## Regras
 
 - Pesquisa antes da issue; DoR antes de criar. Faltou informação, pergunte.
+- Decisão em aberto ou contradição na pesquisa: `grill-me`, com o resultado gravado no `.notebook/` e no DOR.
 - O template do repositório manda: título com prefixo, label de tipo, seções Contexto / DOR / DOD, nada a mais.
 - Nada de dado sensível ou de criança na issue.
 - Esta skill **cria issue, e só**: nunca faz `git commit`, `git push` nem abre PR. Commit, push e PR
