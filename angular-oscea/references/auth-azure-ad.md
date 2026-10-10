@@ -21,7 +21,7 @@ npm install @azure/msal-angular @azure/msal-browser
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { provideExperimentalZonelessChangeDetection } from '@angular/core';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { PublicClientApplication, InteractionType } from '@azure/msal-browser';
 import {
   MSAL_INSTANCE,
@@ -45,7 +45,7 @@ const msalInstance = new PublicClientApplication({
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideExperimentalZonelessChangeDetection(),
+    provideZonelessChangeDetection(),
     provideRouter(routes),
     provideHttpClient(withInterceptors([])), // MsalInterceptor registrado via HTTP_INTERCEPTORS abaixo
     { provide: MSAL_INSTANCE, useValue: msalInstance },

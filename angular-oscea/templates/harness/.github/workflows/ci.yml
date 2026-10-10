@@ -1,0 +1,39 @@
+name: CI
+
+# Testes e build rodam na máquina de quem abre o PR (hook .githooks/pre-push), não aqui:
+# este job só confere, sem instalar nada, o carimbo (ref refs/verificacoes/<sha>) do commit verificado, o checklist e a issue vinculada.
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+    branches:
+      - main
+
+jobs:
+  checar-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Conferir carimbo de verificação
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: node scripts/carimbo.mjs conferir "$HEAD_SHA" origin
+
+      - name: Conferir corpo do PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body ?? '';
+            const erros = [];
+            if (!/(closes|refs) #\d+/i.test(body)) {
+              erros.push('Falta "Closes #<issue>" (ou "Refs #<issue>") no corpo do PR.');
+            }
+            if (/- \[ \]/.test(body)) {
+              erros.push('Há itens do checklist do PR sem marcar.');
+            }
+            if (erros.length) {
+              core.setFailed(erros.join('\n'));
+            }

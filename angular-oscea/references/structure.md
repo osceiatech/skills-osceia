@@ -126,30 +126,27 @@ export interface PaginatedResponse<T> extends ApiResponse<T[]> {
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter, withPreloading, PreloadAllModules } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { provideExperimentalZonelessChangeDetection } from '@angular/core';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
-import { providePrimeNG } from 'primeng/config'; // somente se PrimeNG estiver no projeto
-import Aura from '@primeuix/themes/aura';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/auth/auth.interceptor';
 import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideExperimentalZonelessChangeDetection(),
+    provideZonelessChangeDetection(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
-    // providePrimeNG({ theme: { preset: Aura } }),  // descomentar se usar PrimeNG
   ],
 };
 ```
 
 > Para projetos internos (Azure AD/MSAL), ver o `app.config.ts` completo em
-> `references/auth-azure-ad.md` — os providers de auth mudam, o resto (zoneless,
-> router, PrimeNG) é igual.
+> `references/auth-azure-ad.md` — os providers de auth mudam, o resto (zoneless e
+> router) é igual.
 
 ---
 
@@ -163,7 +160,9 @@ Antes de submeter qualquer PR, verifique:
 - [ ] Nenhum `constructor` com injeção — apenas `inject()`
 - [ ] Nenhum `*ngIf` / `*ngFor` — apenas `@if` / `@for`
 - [ ] Nenhum `ngClass` / `ngStyle`
-- [ ] Todo componente tem `ChangeDetectionStrategy.OnPush`
+- [ ] Nenhum import novo de `primeng` (ver `references/primeng-migration.md`)
+- [ ] Componente interativo novo cumpre AXE/WCAG AA (foco, teclado, ARIA)
+- [ ] OnPush: declarado em Angular v21; **não** declarado em v22+ (já é o padrão)
 - [ ] Todo `<input>` de formulário tem `<label>` associado
 - [ ] Nenhum `any` no TypeScript
 - [ ] Signals usam `.set()` ou `.update()`, nunca `.mutate()`
@@ -172,6 +171,12 @@ Antes de submeter qualquer PR, verifique:
 - [ ] Autenticação passa pelo `FirebaseAuthService`/`AzureAuthService`, nunca chama o SDK diretamente no componente
 - [ ] Token injetado via interceptor (`authInterceptor` no Firebase, `MsalInterceptor` no Azure AD), nunca manualmente nos services
 - [ ] Projeto usa **um único** provider de auth — nunca Firebase e Azure AD juntos no mesmo app
+
+**Fluxo / Git**
+- [ ] Branch `<tipo>/<issue>-<slug>`, pesquisa em `.notebook/` (com `#issue` no `INDEX.md`) e spec em `.specs/features/<issue>-<slug>/`
+- [ ] `npm test -- --no-watch` e `npm run build` passando; carimbo gerado pelo `pre-push`
+- [ ] PR pelo template, com `Closes #<issue>` e checklist marcado
+- [ ] Nenhum dado pessoal real, token ou chave em código, teste, seed, log ou captura
 
 **Supabase**
 - [ ] Nenhum componente chama o cliente Supabase diretamente — sempre via service

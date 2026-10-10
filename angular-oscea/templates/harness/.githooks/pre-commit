@@ -1,0 +1,4 @@
+#!/bin/sh
+# Nada é commitado na main, e código só entra com pesquisa, issue, branch e spec
+# (.agents/harness.config, seções 1 e 3). Não use --no-verify para contornar.
+exec node scripts/guard-implementacao.mjs commit

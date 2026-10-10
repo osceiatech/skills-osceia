@@ -1,79 +1,38 @@
-# Hooks de Governança — Angular OSCEA
+# Hooks e Harness — Angular OSCEA
 
-Os scripts em `angular-oscea/hooks/` implementam, como hooks do Claude Code, parte das
-regras da seção 12 (Governança de Projeto) do `SKILL.md`. Eles **avisam, não bloqueiam**
-— ficam a critério de quem está desenvolvendo seguir ou ignorar o aviso (ex.: numa
-`quick task` do `tlc-spec-driven`, não ter spec é esperado).
+Duas camadas, com papéis diferentes:
 
-Os scripts ficam neste repositório (não em `~/.claude/`) porque este repositório é a
-fonte compartilhada das skills da equipe. O que é local de cada máquina é apenas a
-**ativação** dos hooks (o arquivo `settings.json` do Claude Code, que não é versionado).
-
----
-
-## O que cada script faz
-
-| Script | Evento | Regra |
+| Camada | Onde vive | Natureza |
 |---|---|---|
-| `feature-spec-check.sh` | `PostToolUse` (`Write\|Edit`) | Ao editar um arquivo em `src/app/features/[feature]/`, avisa (uma vez por feature/sessão) se não existir `.specs/features/[feature]/spec.md` |
-| `ts-edit-counter.sh` | `PostToolUse` (`Write\|Edit`) | A cada 20 edições de `.ts`/`.tsx` na sessão, sugere rodar a skill `cyclomatic-complexity` |
-| `commit-size-check.sh` | `PreToolUse` (`Bash`, filtrado para `git commit*`) | Avisa se o commit staged tiver mais de 8 arquivos ou 300 linhas adicionadas — incentiva commits pequenos e atômicos |
-| `session-summary.sh` | `Stop` | Ao fim da sessão, lista as features alteradas e lembra de specs, testes e2e, `cyclomatic-complexity` e commits atômicos antes do PR |
+| **Hooks da skill** (`hooks/`) | `~/.agents/skills/angular-oscea/hooks/` + ativação em `~/.claude/settings.json` | Contexto e bootstrap, por máquina |
+| **Harness do projeto** (`templates/harness/`) | Versionado em cada repositório | **Bloqueante**, vale para toda a equipe e todo agente |
 
-Nenhum desses hooks consegue verificar de forma determinística se **existem testes de
-ponta a ponta** (os projetos usam Vitest para unitários; não há framework e2e padrão) —
-por isso esse item vira apenas um lembrete no resumo de fim de sessão, não uma checagem
-automática.
+Os antigos hooks de aviso (`feature-spec-check`, `ts-edit-counter`, `commit-size-check`,
+`session-summary`) foram **removidos**: o guard do projeto passou a bloquear de verdade o que
+eles só avisavam.
 
 ---
 
-## Como ativar na sua máquina
+## Hooks da skill
 
-Adicione ao seu `~/.claude/settings.json` (para valer em todos os projetos OSCEA) ou ao
-`.claude/settings.json` do projeto específico (para valer só ali). Ajuste o caminho dos
-scripts se você clonou este repositório em outro lugar — o padrão assume
-`~/.agents/skills` (mesma convenção usada pelos symlinks em `~/.claude/skills/`).
+| Script | Evento | O que faz |
+|---|---|---|
+| `session-start.sh` | `SessionStart` | Em pasta com `angular.json`, manda o Claude invocar a skill `angular-oscea`, repassar o contexto (projeto, branch, passo do fluxo) e criar o que faltar do harness |
+| `bootstrap-harness.sh [--check] [raiz]` | manual / pela skill | Cria, **sem sobrescrever**, os arquivos do harness a partir de `templates/harness/`; adiciona `prepare`/`carimbo` ao `package.json`; liga `core.hooksPath`; lista pendências manuais |
+| `sync-harness.sh [--apply] [raiz]` | manual | Mostra (ou aplica) divergências dos arquivos de enforcement idênticos entre projetos (guard, carimbo, hooks git, ci.yml, templates de issue). Nunca toca em `harness.config`, `AGENTS.md` nem no template de PR |
+
+### Ativar na máquina (`~/.claude/settings.json`)
 
 ```json
 {
   "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.agents/skills/angular-oscea/hooks/commit-size-check.sh 2>/dev/null || true",
-            "if": "Bash(git commit*)",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.agents/skills/angular-oscea/hooks/feature-spec-check.sh 2>/dev/null || true",
-            "timeout": 10
-          },
-          {
-            "type": "command",
-            "command": "bash ~/.agents/skills/angular-oscea/hooks/ts-edit-counter.sh 2>/dev/null || true",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "Stop": [
+    "SessionStart": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.agents/skills/angular-oscea/hooks/session-summary.sh 2>/dev/null || true",
-            "timeout": 10
+            "command": "bash ~/.agents/skills/angular-oscea/hooks/session-start.sh 2>/dev/null || true",
+            "timeout": 15
           }
         ]
       }
@@ -82,16 +41,30 @@ scripts se você clonou este repositório em outro lugar — o padrão assume
 }
 ```
 
-Se você já tem hooks configurados (ex.: o hook do RTK em `PreToolUse`/`Bash`), **mescle**
-os arrays — não substitua o que já existe. Veja a skill `update-config` para o
-procedimento de mesclagem e verificação.
+Mescle com os hooks já existentes (ex.: RTK em `PreToolUse`/`Bash`); não substitua. Valide com
+`jq empty ~/.claude/settings.json`. Se o hook não aparecer, abra `/hooks` uma vez para recarregar.
 
-Depois de editar, valide com:
+---
 
-```bash
-jq empty ~/.claude/settings.json
-```
+## Harness do projeto (bloqueante)
 
-Se o `.claude/settings.json` for novo (nunca existiu nesta pasta antes desta sessão),
-pode ser necessário abrir `/hooks` uma vez no Claude Code para ele recarregar a
-configuração.
+Arquivos em `templates/harness/` (placeholders: `{{PROJETO}}`, `{{REPO}}`, `{{WORKFLOW_AZURE}}`):
+
+| Arquivo | Função |
+|---|---|
+| `.agents/harness.config` | Regras do agente: git, testes, fluxo, `.notebook/`, issues/PRs, deploy |
+| `.githooks/pre-commit` | Chama o guard: sem commit na `main`; código só com pesquisa + branch + spec |
+| `.githooks/pre-push` | Bloqueia push na `main`; roda `npm test` e `npm run build`; grava o carimbo |
+| `scripts/guard-implementacao.mjs` | Lógica do guard (modos `commit` e `claude`) |
+| `scripts/carimbo.mjs` | Gera/confere `refs/verificacoes/<sha>` |
+| `scripts/instalar-hooks.mjs` | `npm install` → `core.hooksPath .githooks` |
+| `.claude/settings.json` | PreToolUse: bloqueia Edit/Write fora do fluxo |
+| `.github/workflows/ci.yml` | Confere carimbo, checklist e `Closes #<issue>` (não roda testes) |
+| `.github/ISSUE_TEMPLATE/*`, `PULL_REQUEST_TEMPLATE.md`, `git-commit-instructions.md` | Formatos obrigatórios |
+| `AGENTS.md`, `.claude/CLAUDE.md` | Regras Angular + ponteiro para o harness |
+
+O workflow de deploy Azure (`azure-static-web-apps-*.yml`) é específico de cada projeto e
+**não** está nos templates.
+
+Fluxo para corrigir o enforcement: alterar em `templates/harness/` → `sync-harness.sh --apply`
+em cada projeto → abrir issue/PR por projeto (a regra de git vale para a própria manutenção).
