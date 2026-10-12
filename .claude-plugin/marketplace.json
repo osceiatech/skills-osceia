@@ -80,7 +80,7 @@
       "source": "./defuddle",
       "description": "Extract clean markdown content from web pages using Defuddle CLI, removing clutter and navigation to save tokens. Use instead of WebFetch when the user provides a URL to read or analyze, for online documentation, articles, blog posts,...",
       "version": "1.0.0",
-      "category": "obsidian-tools",
+      "category": "outros",
       "strict": false,
       "skills": [
         "./"
@@ -208,17 +208,6 @@
       ]
     },
     {
-      "name": "json-canvas",
-      "source": "./json-canvas",
-      "description": "Create and edit JSON Canvas files (.canvas) with nodes, edges, groups, and connections. Use when working with .canvas files, creating visual canvases, mind maps, flowcharts, or when the user mentions Canvas files in Obsidian.",
-      "version": "1.0.0",
-      "category": "obsidian-tools",
-      "strict": false,
-      "skills": [
-        "./"
-      ]
-    },
-    {
       "name": "markitdown-local",
       "source": "./markitdown-local",
       "description": "Convert trusted local documents to Markdown with a version-pinned Microsoft MarkItDown runtime. Use when the user needs a durable .md artifact, batch-ready extraction, or local conversion of PDF, DOCX, PPTX, XLS/XLSX, Outlook MSG, HTML,...",
@@ -246,50 +235,6 @@
       "description": "Migrate test files from `as` type assertions to @total-typescript/shoehorn. Use when user mentions shoehorn, wants to replace `as` in tests, or needs partial test data.",
       "version": "1.0.0",
       "category": "engineering-workflow",
-      "strict": false,
-      "skills": [
-        "./"
-      ]
-    },
-    {
-      "name": "obsidian-bases",
-      "source": "./obsidian-bases",
-      "description": "Create and edit Obsidian Bases (.base files) with views, filters, formulas, and summaries. Use when working with .base files, creating database-like views of notes, or when the user mentions Bases, table views, card views, filters, or...",
-      "version": "1.0.0",
-      "category": "obsidian-tools",
-      "strict": false,
-      "skills": [
-        "./"
-      ]
-    },
-    {
-      "name": "obsidian-cli",
-      "source": "./obsidian-cli",
-      "description": "Interact with Obsidian vaults using the Obsidian CLI to read, create, search, and manage notes, tasks, properties, and more. Also supports plugin and theme development with commands to reload plugins, run JavaScript, capture errors,...",
-      "version": "1.0.0",
-      "category": "obsidian-tools",
-      "strict": false,
-      "skills": [
-        "./"
-      ]
-    },
-    {
-      "name": "obsidian-markdown",
-      "source": "./obsidian-markdown",
-      "description": "Create and edit Obsidian Flavored Markdown with wikilinks, embeds, callouts, properties, and other Obsidian-specific syntax. Use when working with .md files in Obsidian, or when the user mentions wikilinks, callouts, frontmatter, tags,...",
-      "version": "1.0.0",
-      "category": "obsidian-tools",
-      "strict": false,
-      "skills": [
-        "./"
-      ]
-    },
-    {
-      "name": "obsidian-vault",
-      "source": "./obsidian-vault",
-      "description": "Search, create, and manage notes in the Obsidian vault with wikilinks and index notes. Use when user wants to find, create, or organize notes in Obsidian.",
-      "version": "1.0.0",
-      "category": "obsidian-tools",
       "strict": false,
       "skills": [
         "./"
