@@ -35,10 +35,10 @@ claude plugin install tdd@skills-osceia --scope local      # neste projeto, só 
 | `project` | `.claude/settings.json` do repositório | todo o time, ao abrir o projeto |
 | `local` | `.claude/settings.local.json` | só você, só neste projeto |
 
-Vários de uma vez (exemplo: o tema Obsidian):
+Vários de uma vez (exemplo: o tema Escrita e ensino):
 
 ```bash
-for p in obsidian-vault obsidian-cli obsidian-markdown obsidian-bases json-canvas defuddle; do
+for p in edit-article writing-beats writing-fragments writing-shape teach caveman; do
   claude plugin install "$p@skills-osceia" --scope user
 done
 ```
@@ -50,8 +50,8 @@ done
 | Desenvolvimento OSCEIA | `angular-oscea`, `authenticated-web-system-reverse-engineering`, `feature-doc-generator`, `gh-issue-dor-dod`, `markitdown-local`, `md-to-pdf`, `osceia-design`, `technical-design-doc-creator` |
 | Escrita e ensino | `caveman`, `edit-article`, `teach`, `writing-beats`, `writing-fragments`, `writing-shape` |
 | Fluxo de engenharia | `codenavi`, `council`, `cyclomatic-complexity`, `design-an-interface`, `diagnose`, `git-guardrails`, `grill-me`, `grill-with-docs`, `handoff`, `improve-codebase-architecture`, `migrate-to-shoehorn`, `prototype`, `qa`, `request-refactor-plan`, `review`, `scaffold-exercises`, `setup-matt-pocock-skills`, `setup-pre-commit`, `tdd`, `tlc-spec-driven`, `to-issues`, `to-prd`, `triage`, `ubiquitous-language`, `zoom-out` |
-| Obsidian | `defuddle`, `json-canvas`, `obsidian-bases`, `obsidian-cli`, `obsidian-markdown`, `obsidian-vault` |
 | Criar e achar skills | `find-skills`, `write-a-skill` |
+| Outros | `defuddle` |
 | Mods do Claude Code | `educa-lateral` |
 
 A skill instalada aparece com o prefixo do plugin (ex.: `/tdd:tdd`).
