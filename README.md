@@ -77,11 +77,16 @@ claude plugin install osceia-chat@skills-osceia --scope user
 
 O mascote do Claude Code é recolorido (verde sobre azul-marinho), mas a imagem em si não pode ser trocada por um mod.
 
-### Mod `extra-mods` (de terceiro)
+### Mod `extra-mods` (de terceiro, com painel OSCEIA)
 
 De [Jhonatan de Souza](https://github.com/Jhonatan-de-Souza/ClaudeMods): modo Zen com faixa de progresso, temas do
-terminalcolors.com, controles de modelo/esforço/permissão e linha de status. Não está copiado aqui: o marketplace
-aponta para o repositório dele, **fixado no commit `9b4b59f`**. O repositório de origem não declara licença.
+terminalcolors.com, controles de modelo/esforço/permissão e linha de status. Esta é uma **cópia modificada**, em
+[`extra-mods/`](./extra-mods/), que acrescenta o painel **OSCEIA skills** (opção 5 do menu `◆ extra-mods ▲`, ou
+`/tools skills`): lista as skills e mods deste marketplace e copia o comando de instalação.
+
+Origem, alterações e a ressalva de licença (o repositório original não declara licença; esta cópia não deve sair
+deste repositório privado sem a autorização do autor) estão em
+[`extra-mods/ORIGEM-OSCEIA.md`](./extra-mods/ORIGEM-OSCEIA.md).
 
 ### Atualizar
 
