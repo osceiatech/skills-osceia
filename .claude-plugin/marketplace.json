@@ -1,0 +1,105 @@
+{
+  "name": "skills-osceia",
+  "owner": {
+    "name": "OSCEIA",
+    "url": "https://github.com/osceiatech"
+  },
+  "metadata": {
+    "description": "Marketplace de skills e automações do ecossistema OSCEIA/Fóton",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "osceia-dev",
+      "source": "./",
+      "description": "Skills de desenvolvimento e documentação do ecossistema OSCEIA/Fóton (Angular, design, TDD técnico, issues DoR/DoD, conversão de documentos, engenharia reversa).",
+      "version": "1.0.0",
+      "strict": false,
+      "skills": [
+        "./osceia-design",
+        "./angular-oscea",
+        "./technical-design-doc-creator",
+        "./feature-doc-generator",
+        "./gh-issue-dor-dod",
+        "./authenticated-web-system-reverse-engineering",
+        "./md-to-pdf",
+        "./markitdown-local"
+      ]
+    },
+    {
+      "name": "engineering-workflow",
+      "source": "./",
+      "description": "Fluxo de engenharia: planejamento, TDD, diagnóstico, revisão, QA, triagem, PRDs/issues, refatoração e guardrails de git.",
+      "version": "1.0.0",
+      "strict": false,
+      "skills": [
+        "./tdd",
+        "./diagnose",
+        "./review",
+        "./qa",
+        "./triage",
+        "./to-issues",
+        "./to-prd",
+        "./request-refactor-plan",
+        "./improve-codebase-architecture",
+        "./design-an-interface",
+        "./prototype",
+        "./grill-me",
+        "./grill-with-docs",
+        "./ubiquitous-language",
+        "./zoom-out",
+        "./handoff",
+        "./migrate-to-shoehorn",
+        "./scaffold-exercises",
+        "./setup-matt-pocock-skills",
+        "./setup-pre-commit",
+        "./git-guardrails-claude-code",
+        "./cyclomatic-complexity",
+        "./codenavi",
+        "./council",
+        "./tlc-spec-driven"
+      ]
+    },
+    {
+      "name": "obsidian-tools",
+      "source": "./",
+      "description": "Skills para Obsidian: vault, CLI, Markdown, Bases, JSON Canvas e extração de conteúdo web (defuddle).",
+      "version": "1.0.0",
+      "strict": false,
+      "skills": [
+        "./obsidian-vault",
+        "./obsidian-cli",
+        "./obsidian-markdown",
+        "./obsidian-bases",
+        "./json-canvas",
+        "./defuddle"
+      ]
+    },
+    {
+      "name": "writing-tools",
+      "source": "./",
+      "description": "Skills de escrita e ensino: edição de artigos, fragmentos, beats, shape, teach e modo caveman.",
+      "version": "1.0.0",
+      "strict": false,
+      "skills": [
+        "./edit-article",
+        "./writing-beats",
+        "./writing-fragments",
+        "./writing-shape",
+        "./teach",
+        "./caveman"
+      ]
+    },
+    {
+      "name": "skill-authoring",
+      "source": "./",
+      "description": "Descoberta e criação de skills.",
+      "version": "1.0.0",
+      "strict": false,
+      "skills": [
+        "./find-skills",
+        "./write-a-skill"
+      ]
+    }
+  ]
+}
