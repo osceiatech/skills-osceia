@@ -1,0 +1,1 @@
+{ "name": "educa-lateral", "version": "0.1.0", "description": "Painel lateral (~40% do terminal) com textos curtos que explicam as tecnologias escolhidas enquanto algo é desenvolvido.", "author": { "name": "victor" }, "types": "./types/index.d.ts" }
