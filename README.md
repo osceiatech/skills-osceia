@@ -52,7 +52,7 @@ done
 | Fluxo de engenharia | `codenavi`, `council`, `cyclomatic-complexity`, `design-an-interface`, `diagnose`, `git-guardrails`, `grill-me`, `grill-with-docs`, `handoff`, `improve-codebase-architecture`, `migrate-to-shoehorn`, `prototype`, `qa`, `request-refactor-plan`, `review`, `scaffold-exercises`, `setup-matt-pocock-skills`, `setup-pre-commit`, `tdd`, `tlc-spec-driven`, `to-issues`, `to-prd`, `triage`, `ubiquitous-language`, `zoom-out` |
 | Criar e achar skills | `find-skills`, `write-a-skill` |
 | Outros | `defuddle` |
-| Mods do Claude Code | `educa-lateral` |
+| Mods do Claude Code | `educa-lateral`, `osceia-chat`, `extra-mods` |
 
 A skill instalada aparece com o prefixo do plugin (ex.: `/tdd:tdd`).
 
@@ -64,6 +64,24 @@ desenvolvido. Detalhes em [`educa-lateral/README.md`](./educa-lateral/README.md)
 ```bash
 claude plugin install educa-lateral@skills-osceia --scope user
 ```
+
+### Mod `osceia-chat`
+
+Tema **OSCEIA Chat** (azul-marinho `#101840`, verde `#00CA6A` e dourado `#FBC26E`, as cores do site) e chat com
+respiro: linha em branco entre as mensagens, texto recuado sob o marcador `●` e a mensagem da pessoa em bloco
+sombreado, ao estilo do Codex. Depois de instalar, escolha o tema em `/theme` ("OSCEIA Chat").
+
+```bash
+claude plugin install osceia-chat@skills-osceia --scope user
+```
+
+O mascote do Claude Code é recolorido (verde sobre azul-marinho), mas a imagem em si não pode ser trocada por um mod.
+
+### Mod `extra-mods` (de terceiro)
+
+De [Jhonatan de Souza](https://github.com/Jhonatan-de-Souza/ClaudeMods): modo Zen com faixa de progresso, temas do
+terminalcolors.com, controles de modelo/esforço/permissão e linha de status. Não está copiado aqui: o marketplace
+aponta para o repositório dele, **fixado no commit `9b4b59f`**. O repositório de origem não declara licença.
 
 ### Atualizar
 

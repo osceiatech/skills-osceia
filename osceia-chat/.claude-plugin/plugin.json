@@ -1,0 +1,7 @@
+{
+  "name": "osceia-chat",
+  "version": "0.2.0",
+  "description": "Tema OSCEIA (azul-marinho, verde e dourado do site), marca da OSCEIA no terminal e chat com respiro entre as mensagens, ao estilo do Codex.",
+  "author": { "name": "OSCEIA" },
+  "types": "./types/index.d.ts"
+}
