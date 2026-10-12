@@ -7,7 +7,14 @@ tecnologias que estão sendo escolhidas enquanto algo é desenvolvido.
 - `/educar` abre ou fecha o painel; `/educar limpar` apaga as notas.
 - Uma seção no system prompt pede notas em pt-BR, curtas, sem dado pessoal.
 
-## Usar
+## Instalar
+
+```bash
+/plugin marketplace add osceiatech/skills-osceia
+/plugin install educa-lateral --marketplace osceiatech/skills-osceia
+```
+
+Para testar a partir da pasta, sem instalar:
 
 ```bash
 claude --plugin-dir ~/.agents/skills/educa-lateral
