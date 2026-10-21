@@ -4,7 +4,7 @@ Duas camadas, com papéis diferentes:
 
 | Camada | Onde vive | Natureza |
 |---|---|---|
-| **Hooks da skill** (`hooks/`) | `~/.agents/skills/angular-oscea/hooks/` + ativação em `~/.claude/settings.json` | Contexto e bootstrap, por máquina |
+| **Hooks da skill** (`hooks/`) | `~/.agents/skills/osceia-dev/hooks/` + ativação em `~/.claude/settings.json` | Contexto e bootstrap, por máquina |
 | **Harness do projeto** (`templates/harness/`) | Versionado em cada repositório | **Bloqueante**, vale para toda a equipe e todo agente |
 
 Os antigos hooks de aviso (`feature-spec-check`, `ts-edit-counter`, `commit-size-check`,
@@ -17,7 +17,7 @@ eles só avisavam.
 
 | Script | Evento | O que faz |
 |---|---|---|
-| `session-start.sh` | `SessionStart` | Em pasta com `angular.json`, manda o Claude invocar a skill `angular-oscea`, repassar o contexto (projeto, branch, passo do fluxo) e criar o que faltar do harness |
+| `session-start.sh` | `SessionStart` | Em pasta com `angular.json`, manda o Claude invocar a skill `osceia-dev`, repassar o contexto (projeto, branch, passo do fluxo) e criar o que faltar do harness |
 | `bootstrap-harness.sh [--check] [raiz]` | manual / pela skill | Cria, **sem sobrescrever**, os arquivos do harness a partir de `templates/harness/`; adiciona `prepare`/`carimbo` ao `package.json`; liga `core.hooksPath`; lista pendências manuais |
 | `sync-harness.sh [--apply] [raiz]` | manual | Mostra (ou aplica) divergências dos arquivos de enforcement idênticos entre projetos (guard, carimbo, hooks git, ci.yml, templates de issue). Nunca toca em `harness.config`, `AGENTS.md` nem no template de PR |
 
@@ -31,7 +31,7 @@ eles só avisavam.
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.agents/skills/angular-oscea/hooks/session-start.sh 2>/dev/null || true",
+            "command": "bash ~/.agents/skills/osceia-dev/hooks/session-start.sh 2>/dev/null || true",
             "timeout": 15
           }
         ]

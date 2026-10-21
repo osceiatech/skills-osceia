@@ -301,7 +301,7 @@ Badge → bg-green (#008036), text-white
 
 Esta skill se complementa com:
 
-- **`angular-oscea`** → Padrões Angular/TypeScript específicos OSCEIA
+- **`osceia-dev`** → Padrões Angular/TypeScript específicos OSCEIA
 - **`tlc-spec-driven`** → Planejamento spec-driven de features
 - **`feature-doc-generator`** → Documentar features implementadas
 - **`bpmn-generator`** → Gerar/validar diagramas BPMN
@@ -310,7 +310,7 @@ Esta skill se complementa com:
 - **`council`** → Deliberar sobre decisões de design
 
 **Quando usar cada:**
-- Novo componente Angular? → `/angular-oscea component` depois `/osceia-design component`
+- Novo componente Angular? → `/osceia-dev component` depois `/osceia-design component`
 - Design de feature nova? → `/tlc-spec-driven` (spec) → `/osceia-design audit` (visual)
 - Documentar o que foi feito? → `/feature-doc-generator` → `/osceia-design polish-doc`
 - Decisão de design complexa? → `/council` (deliberar estratégia)

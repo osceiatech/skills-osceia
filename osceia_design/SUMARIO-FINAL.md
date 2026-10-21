@@ -135,7 +135,7 @@ Depois, experimente:
 - Paleta CSS pronta (tokens.css)
 
 ✅ **Integração com Outras Skills**
-- `angular-oscea` → Padrões Angular
+- `osceia-dev` → Padrões Angular
 - `tlc-spec-driven` → Planejamento
 - `bpmn-generator` → Processos
 - `docx` → Documentos Word

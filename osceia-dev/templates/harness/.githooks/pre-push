@@ -1,6 +1,6 @@
 #!/bin/sh
 # 1) Ninguém faz push na main: toda mudança entra por pull request (.agents/harness.config, seção 1).
-# 2) Todo push de branch só sai com testes e build passando (.agents/harness.config, seção 2).
+# 2) Todo push de branch só sai com testes, build e padrões OSCEIA passando (.agents/harness.config, seção 2).
 # Ativado pelo `npm install` (scripts/instalar-hooks.mjs). Não use --no-verify para contornar.
 verificar=0
 shas=""
@@ -20,6 +20,9 @@ if [ "$verificar" = "1" ]; then
   echo "pre-push: rodando a verificação antes de enviar..." >&2
   npm test -- --no-watch || { echo "pre-push: falhou: npm test -- --no-watch. Push cancelado." >&2; exit 1; }
   npm run build || { echo "pre-push: falhou: npm run build. Push cancelado." >&2; exit 1; }
+  for sha in $shas; do
+    node scripts/verificar-padroes.mjs "$sha" || { echo "pre-push: falhou: node scripts/verificar-padroes.mjs. Push cancelado." >&2; exit 1; }
+  done
   for sha in $shas; do
     node scripts/carimbo.mjs gerar "$sha" "$1" >&2 || { echo "pre-push: não consegui gravar o carimbo no remoto. Push cancelado." >&2; exit 1; }
   done
