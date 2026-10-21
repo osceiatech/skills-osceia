@@ -52,7 +52,7 @@ done
 | Fluxo de engenharia | `codenavi`, `council`, `cyclomatic-complexity`, `design-an-interface`, `diagnose`, `git-guardrails`, `grill-me`, `grill-with-docs`, `handoff`, `improve-codebase-architecture`, `migrate-to-shoehorn`, `prototype`, `qa`, `request-refactor-plan`, `review`, `scaffold-exercises`, `setup-matt-pocock-skills`, `setup-pre-commit`, `tdd`, `tlc-spec-driven`, `to-issues`, `to-prd`, `triage`, `ubiquitous-language`, `zoom-out` |
 | Criar e achar skills | `find-skills`, `write-a-skill` |
 | Outros | `defuddle` |
-| Mods do Claude Code | `educa-lateral`, `osceia-chat`, `extra-mods` |
+| Mods do Claude Code | `educa-lateral`, `osceia-chat`, `extra-mods`, `usage-line` |
 
 A skill instalada aparece com o prefixo do plugin (ex.: `/tdd:tdd`).
 
@@ -87,6 +87,15 @@ terminalcolors.com, controles de modelo/esforço/permissão e linha de status. E
 Origem, alterações e a ressalva de licença (o repositório original não declara licença; esta cópia não deve sair
 deste repositório privado sem a autorização do autor) estão em
 [`extra-mods/ORIGEM-OSCEIA.md`](./extra-mods/ORIGEM-OSCEIA.md).
+
+### Mod `usage-line`
+
+Linha de status compacta com o consumo da sessão: modelo, branch, barras de contexto e dos limites 5h/7d, custo e
+estado do cache de prompt. Detalhes em [`usage-line/README.md`](./usage-line/README.md).
+
+```bash
+claude plugin install usage-line@skills-osceia --scope user
+```
 
 ### Atualizar
 
