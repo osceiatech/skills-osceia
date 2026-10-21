@@ -1,5 +1,5 @@
 ---
-name: angular-oscea
+name: osceia-dev
 description: >
   Padrões e diretrizes para desenvolvimento Angular na OSCEA (Secretaria) e para a
   governança de projetos, do levantamento de requisitos ao deploy.
@@ -48,7 +48,7 @@ Esta skill é chamada **no início de toda sessão** em projeto Angular OSCEA (o
 outra ação:
 
 1. **Detectar o projeto:** `angular.json` na raiz. Se não for Angular OSCEA, ignorar esta seção.
-2. **Verificar o harness:** rodar `bash ~/.agents/skills/angular-oscea/hooks/bootstrap-harness.sh --check`.
+2. **Verificar o harness:** rodar `bash ~/.agents/skills/osceia-dev/hooks/bootstrap-harness.sh --check`.
    Se faltar algo, rodar sem `--check`: ele cria só o que não existe (nunca sobrescreve),
    a partir de `templates/harness/`, adiciona `prepare`/`carimbo` ao `package.json`, liga
    o `core.hooksPath` e lista as pendências manuais (workflow Azure, repositório e comandos

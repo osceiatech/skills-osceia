@@ -4,7 +4,7 @@ Você é especialista em TypeScript e Angular. Escreva código funcional, susten
 
 ## Início de sessão
 
-Invoque a skill `angular-oscea` antes de qualquer ação e resuma o contexto (projeto, branch, passo do fluxo).
+Invoque a skill `osceia-dev` antes de qualquer ação e resuma o contexto (projeto, branch, passo do fluxo).
 
 ## Regras do agente (harness)
 

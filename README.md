@@ -47,12 +47,12 @@ done
 
 | Tema | Plugins |
 |---|---|
-| Desenvolvimento OSCEIA | `angular-oscea`, `authenticated-web-system-reverse-engineering`, `feature-doc-generator`, `gh-issue-dor-dod`, `markitdown-local`, `md-to-pdf`, `osceia-design`, `technical-design-doc-creator` |
+| Desenvolvimento OSCEIA | `osceia-dev`, `authenticated-web-system-reverse-engineering`, `feature-doc-generator`, `gh-issue-dor-dod`, `markitdown-local`, `md-to-pdf`, `osceia-design`, `technical-design-doc-creator` |
 | Escrita e ensino | `caveman`, `edit-article`, `teach`, `writing-beats`, `writing-fragments`, `writing-shape` |
 | Fluxo de engenharia | `codenavi`, `council`, `cyclomatic-complexity`, `design-an-interface`, `diagnose`, `git-guardrails`, `grill-me`, `grill-with-docs`, `handoff`, `improve-codebase-architecture`, `migrate-to-shoehorn`, `prototype`, `qa`, `request-refactor-plan`, `review`, `scaffold-exercises`, `setup-matt-pocock-skills`, `setup-pre-commit`, `tdd`, `tlc-spec-driven`, `to-issues`, `to-prd`, `triage`, `ubiquitous-language`, `zoom-out` |
 | Criar e achar skills | `find-skills`, `write-a-skill` |
 | Outros | `defuddle` |
-| Mods do Claude Code | `educa-lateral`, `osceia-chat`, `extra-mods`, `usage-line` |
+| Mods do Claude Code | `educa-lateral`, `osceia-chat`, `usage-line` |
 
 A skill instalada aparece com o prefixo do plugin (ex.: `/tdd:tdd`).
 
@@ -76,17 +76,6 @@ claude plugin install osceia-chat@skills-osceia --scope user
 ```
 
 O mascote do Claude Code é recolorido (verde sobre azul-marinho), mas a imagem em si não pode ser trocada por um mod.
-
-### Mod `extra-mods` (de terceiro, com painel OSCEIA)
-
-De [Jhonatan de Souza](https://github.com/Jhonatan-de-Souza/ClaudeMods): modo Zen com faixa de progresso, temas do
-terminalcolors.com, controles de modelo/esforço/permissão e linha de status. Esta é uma **cópia modificada**, em
-[`extra-mods/`](./extra-mods/), que acrescenta o painel **OSCEIA skills** (opção 5 do menu `◆ extra-mods ▲`, ou
-`/tools skills`): lista as skills e mods deste marketplace e copia o comando de instalação.
-
-Origem, alterações e a ressalva de licença (o repositório original não declara licença; esta cópia não deve sair
-deste repositório privado sem a autorização do autor) estão em
-[`extra-mods/ORIGEM-OSCEIA.md`](./extra-mods/ORIGEM-OSCEIA.md).
 
 ### Mod `usage-line`
 

@@ -10,8 +10,8 @@
   },
   "plugins": [
     {
-      "name": "angular-oscea",
-      "source": "./angular-oscea",
+      "name": "osceia-dev",
+      "source": "./osceia-dev",
       "description": "Padrões e diretrizes para desenvolvimento Angular na OSCEA (Secretaria) e para a governança de projetos, do levantamento de requisitos ao deploy. Use esta skill SEMPRE que o usuário pedir para criar, editar ou revisar qualquer...",
       "version": "1.0.0",
       "category": "osceia-dev",
@@ -483,13 +483,6 @@
       "source": "./osceia-chat",
       "description": "Tema OSCEIA (azul-marinho, verde e dourado do site), marca da OSCEIA no terminal e chat com respiro entre as mensagens, ao estilo do Codex.",
       "version": "0.2.0",
-      "category": "mods"
-    },
-    {
-      "name": "extra-mods",
-      "source": "./extra-mods",
-      "description": "De Jhonatan de Souza, com painel \"OSCEIA skills\" (catálogo e comando de instalação das nossas skills): modo Zen com faixa de progresso, temas do terminalcolors.com, controles de modelo/esforço/permissão e linha de status.",
-      "version": "0.4.1-osceia.1",
       "category": "mods"
     },
     {
