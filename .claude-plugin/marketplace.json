@@ -491,6 +491,13 @@
       "description": "De Jhonatan de Souza, com painel \"OSCEIA skills\" (catálogo e comando de instalação das nossas skills): modo Zen com faixa de progresso, temas do terminalcolors.com, controles de modelo/esforço/permissão e linha de status.",
       "version": "0.4.1-osceia.1",
       "category": "mods"
+    },
+    {
+      "name": "usage-line",
+      "source": "./usage-line",
+      "description": "Linha de status compacta: modelo, branch, barras de contexto e limites 5h/7d, custo e estado do cache de prompt.",
+      "version": "0.1.0",
+      "category": "mods"
     }
   ]
 }
