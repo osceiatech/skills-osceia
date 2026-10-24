@@ -157,7 +157,7 @@ osceia-design/
 
 Esta skill trabalha junto com:
 
-- **`osceia-dev`** → Patterns Angular/TypeScript
+- **`osceia`** → Patterns Angular/TypeScript
 - **`tlc-spec-driven`** → Planejar features
 - **`feature-doc-generator`** → Documentar implementações
 - **`bpmn-generator`** → Validar BPMN

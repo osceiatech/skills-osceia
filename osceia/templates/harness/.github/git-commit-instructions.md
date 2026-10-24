@@ -13,3 +13,4 @@
 4. **Tamanho:** A primeira linha (título) deve ter no máximo 72 caracteres.
 5. **Corpo do Commit:** Se a alteração for complexa, adicione uma linha em branco após o título e explique o "porquê" da mudança em tópicos usando bullet points (`-`).
 6. **Tom:** Use o verbo no imperativo na descrição curta (ex: "adiciona", "corrige", em vez de "adicionado" ou "corrigido").
+7. **Autoria:** NUNCA acrescente `Co-Authored-By:` com Claude/Anthropic nem "Generated with Claude Code" (nem 🤖). O commit tem só a autoria de quem o faz.

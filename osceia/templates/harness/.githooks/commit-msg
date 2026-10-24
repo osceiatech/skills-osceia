@@ -1,0 +1,8 @@
+#!/bin/sh
+# Recusa commit que credite Claude/IA como coautor (.agents/harness.config, seção 1).
+# Não use --no-verify para contornar; remova a linha e commite de novo.
+if grep -v '^#' "$1" | grep -qiE '^co-authored-by:.*(claude|anthropic)|generated with .*claude|noreply@anthropic\.com'; then
+  echo "commit recusado: a mensagem credita Claude/IA como coautor." >&2
+  echo "Remova 'Co-Authored-By: Claude ...' / 'Generated with Claude Code' e commite de novo." >&2
+  exit 1
+fi

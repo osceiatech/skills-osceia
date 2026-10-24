@@ -10,7 +10,8 @@ root="${1:-$PWD}"
 tpl="$(cd "$(dirname "${BASH_SOURCE[0]}")/../templates/harness" && pwd)"
 cd "$root"
 
-[[ -f angular.json ]] || { echo "bootstrap-harness: $root não é um projeto Angular (sem angular.json)." >&2; exit 0; }
+source "$tpl/../../hooks/lib-stack.sh"
+[[ -n "$(osceia_stack)" ]] || { echo "bootstrap-harness: $root não é um projeto Angular nem React (sem angular.json nem react no package.json)." >&2; exit 0; }
 
 repo=$(basename "$root")
 projeto=$(echo "${repo#osceia-}" | sed 's/./\u&/')

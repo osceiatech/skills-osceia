@@ -4,7 +4,7 @@ Duas camadas, com papéis diferentes:
 
 | Camada | Onde vive | Natureza |
 |---|---|---|
-| **Hooks da skill** (`hooks/`) | `~/.agents/skills/osceia-dev/hooks/` + ativação em `~/.claude/settings.json` | Contexto e bootstrap, por máquina |
+| **Hooks da skill** (`hooks/`) | `~/.agents/skills/osceia/hooks/` + ativação em `~/.claude/settings.json` | Contexto e bootstrap, por máquina |
 | **Harness do projeto** (`templates/harness/`) | Versionado em cada repositório | **Bloqueante**, vale para toda a equipe e todo agente |
 
 Os antigos hooks de aviso (`feature-spec-check`, `ts-edit-counter`, `commit-size-check`,
@@ -17,11 +17,21 @@ eles só avisavam.
 
 | Script | Evento | O que faz |
 |---|---|---|
-| `session-start.sh` | `SessionStart` | Em pasta com `angular.json`, manda o Claude invocar a skill `osceia-dev`, repassar o contexto (projeto, branch, passo do fluxo) e criar o que faltar do harness |
+| `session-start.sh` | `SessionStart` | Em pasta com `angular.json`, manda o Claude invocar a skill `osceia`, repassar o contexto (projeto, branch, passo do fluxo) e criar o que faltar do harness |
 | `bootstrap-harness.sh [--check] [raiz]` | manual / pela skill | Cria, **sem sobrescrever**, os arquivos do harness a partir de `templates/harness/`; adiciona `prepare`/`carimbo` ao `package.json`; liga `core.hooksPath`; lista pendências manuais |
 | `sync-harness.sh [--apply] [raiz]` | manual | Mostra (ou aplica) divergências dos arquivos de enforcement idênticos entre projetos (guard, carimbo, hooks git, ci.yml, templates de issue). Nunca toca em `harness.config`, `AGENTS.md` nem no template de PR |
 
-### Ativar na máquina (`~/.claude/settings.json`)
+### Instalar pelo marketplace (recomendado)
+
+```bash
+claude plugin marketplace add osceiatech/skills-osceia
+claude plugin install osceia@skills-osceia --scope user
+```
+
+O plugin traz o hook `SessionStart` (`hooks/hooks.json`), então **não** é preciso editar o
+`settings.json`. Se já houver o hook manual abaixo, remova-o para o hook não rodar duas vezes.
+
+### Ativar manualmente na máquina (`~/.claude/settings.json`)
 
 ```json
 {
@@ -31,7 +41,7 @@ eles só avisavam.
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.agents/skills/osceia-dev/hooks/session-start.sh 2>/dev/null || true",
+            "command": "bash ~/.agents/skills/osceia/hooks/session-start.sh 2>/dev/null || true",
             "timeout": 15
           }
         ]
@@ -54,6 +64,7 @@ Arquivos em `templates/harness/` (placeholders: `{{PROJETO}}`, `{{REPO}}`, `{{WO
 |---|---|
 | `.agents/harness.config` | Regras do agente: git, testes, fluxo, `.notebook/`, issues/PRs, deploy |
 | `.githooks/pre-commit` | Chama o guard: sem commit na `main`; código só com pesquisa + branch + spec |
+| `.githooks/commit-msg` | Recusa mensagem com `Co-Authored-By:` de Claude/Anthropic ou "Generated with Claude Code" |
 | `.githooks/pre-push` | Bloqueia push na `main`; roda `npm test` e `npm run build`; grava o carimbo |
 | `scripts/guard-implementacao.mjs` | Lógica do guard (modos `commit` e `claude`) |
 | `scripts/carimbo.mjs` | Gera/confere `refs/verificacoes/<sha>` |
