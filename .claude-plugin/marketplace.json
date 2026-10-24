@@ -10,10 +10,10 @@
   },
   "plugins": [
     {
-      "name": "osceia-dev",
-      "source": "./osceia-dev",
-      "description": "Padrões e diretrizes para desenvolvimento Angular na OSCEA (Secretaria) e para a governança de projetos, do levantamento de requisitos ao deploy. Use esta skill SEMPRE que o usuário pedir para criar, editar ou revisar qualquer...",
-      "version": "1.0.0",
+      "name": "osceia",
+      "source": "./osceia",
+      "description": "Padrões Angular/React da OSCEA, harness de governança (hooks, guard, CI), ciclo de verificação e fluxo do levantamento ao deploy. Já traz o hook de início de sessão.",
+      "version": "1.2.0",
       "category": "osceia-dev",
       "strict": false,
       "skills": [

@@ -1,4 +1,4 @@
-// Verifica os padrões Angular OSCEIA nos arquivos alterados da branch (AGENTS.md).
+// Verifica os padrões OSCEIA (regras Angular só em projeto com angular.json; any e LGPD valem também em React) nos arquivos alterados da branch (AGENTS.md).
 // Roda no .githooks/pre-push, junto com testes e build; não existe mais job de lint/scan no GitHub Actions.
 // Uso: node scripts/verificar-padroes.mjs [sha]   (padrão: HEAD; compara com a main)
 //      node scripts/verificar-padroes.mjs --all   (varre todo o src/)
@@ -22,19 +22,20 @@ function arquivosAlterados() {
 
 // Regras: erro bloqueia o push; aviso só informa.
 const regras = [
-  { nivel: 'erro', ext: '.html', re: /\*ngIf|\*ngFor|\*ngSwitch|\[ngStyle\]/, msg: 'Diretiva antiga. Use @if/@for/@switch e style binding.' },
-  { nivel: 'aviso', ext: '.html', re: /\[ngClass\]="\{/, msg: 'ngClass com objeto. Prefira [class.nome]="cond".' },
-  { nivel: 'erro', ext: '.ts', re: /@Input\(|@Output\(/, msg: '@Input/@Output. Use input()/output().' },
-  { nivel: 'erro', ext: '.ts', re: /@NgModule\(/, msg: 'NgModule. Use apenas componentes standalone.' },
-  { nivel: 'erro', ext: '.ts', re: /console\.log.*(cpf|email|token|password|senha|jwt)/i, msg: '[LGPD] Possível dado sensível em console.log.' },
-  { nivel: 'aviso', ext: '.ts', re: /\beffect\(/, ignora: 'osceia-allow-effect', msg: 'effect(). Prefira computed()/toObservable; intencional: // osceia-allow-effect.' },
-  { nivel: 'aviso', ext: '.ts', re: /: any\b|as any\b/, ignora: 'osceia-allow-any', msg: "Uso de 'any'. Prefira unknown; intencional: // osceia-allow-any." },
+  { angular: true, nivel: 'erro', ext: '.html', re: /\*ngIf|\*ngFor|\*ngSwitch|\[ngStyle\]/, msg: 'Diretiva antiga. Use @if/@for/@switch e style binding.' },
+  { angular: true, nivel: 'aviso', ext: '.html', re: /\[ngClass\]="\{/, msg: 'ngClass com objeto. Prefira [class.nome]="cond".' },
+  { angular: true, nivel: 'erro', ext: '.ts', re: /@Input\(|@Output\(/, msg: '@Input/@Output. Use input()/output().' },
+  { angular: true, nivel: 'erro', ext: '.ts', re: /@NgModule\(/, msg: 'NgModule. Use apenas componentes standalone.' },
+  { nivel: 'erro', exts: ['.ts', '.tsx'], re: /console\.log.*(cpf|email|token|password|senha|jwt)/i, msg: '[LGPD] Possível dado sensível em console.log.' },
+  { angular: true, nivel: 'aviso', ext: '.ts', re: /\beffect\(/, ignora: 'osceia-allow-effect', msg: 'effect(). Prefira computed()/toObservable; intencional: // osceia-allow-effect.' },
+  { nivel: 'aviso', exts: ['.ts', '.tsx'], re: /: any\b|as any\b/, ignora: 'osceia-allow-any', msg: "Uso de 'any'. Prefira unknown; intencional: // osceia-allow-any." },
 ];
 
 /** Aplica as regras ao conteúdo de um arquivo e devolve os achados `{ nivel, linha, msg }`. */
 export function verificarConteudo(arquivo, conteudo) {
   const achados = [];
-  for (const regra of regras.filter((r) => arquivo.endsWith(r.ext))) {
+  const angular = existsSync('angular.json');
+  for (const regra of regras.filter((r) => (angular || !r.angular) && (r.exts ?? [r.ext]).some((e) => arquivo.endsWith(e)))) {
     conteudo.split('\n').forEach((linha, i) => {
       if (!regra.re.test(linha) || (regra.ignora && linha.includes(regra.ignora))) return;
       achados.push({ nivel: regra.nivel, linha: i + 1, msg: regra.msg });

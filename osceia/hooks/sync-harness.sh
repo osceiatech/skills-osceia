@@ -7,7 +7,7 @@ set -euo pipefail
 apply=0; [[ "${1:-}" == "--apply" ]] && { apply=1; shift; }
 cd "${1:-$PWD}"
 tpl="$(cd "$(dirname "${BASH_SOURCE[0]}")/../templates/harness" && pwd)"
-arquivos=(.githooks/pre-commit .githooks/pre-push scripts/carimbo.mjs scripts/guard-implementacao.mjs scripts/instalar-hooks.mjs scripts/verificar-padroes.mjs
+arquivos=(.githooks/pre-commit .githooks/commit-msg .githooks/pre-push scripts/carimbo.mjs scripts/guard-implementacao.mjs scripts/instalar-hooks.mjs scripts/verificar-padroes.mjs
   .claude/settings.json .github/workflows/ci.yml .github/git-commit-instructions.md
   .github/ISSUE_TEMPLATE/bug_report.md .github/ISSUE_TEMPLATE/feature_request.md .github/ISSUE_TEMPLATE/config.yml)
 diverge=0

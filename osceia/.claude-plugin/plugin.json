@@ -1,0 +1,6 @@
+{
+  "name": "osceia",
+  "version": "1.2.0",
+  "description": "Padrões Angular/React da OSCEA, harness de governança (hooks, guard, CI), ciclo de verificação e fluxo do levantamento ao deploy.",
+  "author": { "name": "OSCEIA" }
+}
