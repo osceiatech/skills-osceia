@@ -14,27 +14,20 @@ separado, e você instala só o que precisar. Além deles, há dois materiais qu
 
 ## Instalar no Claude Code (marketplace)
 
+O marketplace `skills-osceia` tem dois tipos de item, instalados do mesmo jeito:
+
+- **Skills**: instruções que o Claude segue quando você as chama ou quando a conversa pede (ex.: `tdd`, `osceia`).
+- **Plugins (mods)**: mudam a interface do Claude Code (tema, painel, linha de status).
+
+Cada um é instalável **separadamente**: você instala só o que precisar.
+
 ### 1. Registrar o marketplace (uma vez por máquina)
 
 ```bash
 /plugin marketplace add osceiatech/skills-osceia
 ```
 
-### 2. Instalar o que precisar
-
-**Pelo menu**, escolhendo plugin e escopo na tela:
-
-```bash
-/plugin
-```
-
-**Direto, sem menu**, informando o escopo:
-
-```bash
-claude plugin install osceia@skills-osceia --scope user       # em todos os seus projetos
-claude plugin install osceia@skills-osceia --scope project    # neste projeto, versionado em .claude/settings.json (vale para o time)
-claude plugin install osceia@skills-osceia --scope local      # neste projeto, só para você (não vai para o Git)
-```
+### 2. Escolher o escopo
 
 | Escopo | Onde fica | Quem usa |
 |---|---|---|
@@ -42,7 +35,37 @@ claude plugin install osceia@skills-osceia --scope local      # neste projeto, s
 | `project` | `.claude/settings.json` do repositório | todo o time, ao abrir o projeto |
 | `local` | `.claude/settings.local.json` | só você, só neste projeto |
 
-**Vários de uma vez** (exemplo: o tema Escrita e ensino):
+### Atualizar
+
+```bash
+/plugin marketplace update skills-osceia
+claude plugin update <nome>@skills-osceia
+```
+
+## Skills
+
+### Instalar uma skill
+
+**Pelo menu**, escolhendo a skill e o escopo na tela:
+
+```bash
+/plugin
+```
+
+**Direto**, informando o escopo:
+
+```bash
+claude plugin install osceia@skills-osceia --scope user       # em todos os seus projetos
+claude plugin install osceia@skills-osceia --scope project    # neste projeto, versionado (vale para o time)
+claude plugin install osceia@skills-osceia --scope local      # neste projeto, só para você (não vai para o Git)
+```
+
+Em Claude Code 2.1.275 ou superior também funciona a forma curta:
+`/plugin install <skill> --marketplace osceiatech/skills-osceia`.
+
+### Instalar várias skills
+
+Liste os nomes (exemplo: o tema Escrita e ensino):
 
 ```bash
 for p in edit-article writing-beats writing-fragments writing-shape teach caveman; do
@@ -50,10 +73,17 @@ for p in edit-article writing-beats writing-fragments writing-shape teach cavema
 done
 ```
 
-Em Claude Code 2.1.275 ou superior também funciona a forma curta:
-`/plugin install <plugin> --marketplace osceiatech/skills-osceia`.
+### Instalar todas as skills
 
-### 3. Usar
+Lê o `marketplace.json` e instala tudo que não é mod:
+
+```bash
+gh api repos/osceiatech/skills-osceia/contents/.claude-plugin/marketplace.json -H 'Accept: application/vnd.github.raw' \
+  | jq -r '.plugins[] | select(.category != "mods") | .name' \
+  | while read -r p; do claude plugin install "$p@skills-osceia" --scope user; done
+```
+
+### Usar
 
 A skill instalada aparece com o prefixo do plugin (ex.: `/tdd:tdd`, `/osceia:osceia`). Quem prefere o
 nome curto (`/osceia`) pode linkar a pasta em `~/.claude/skills/`:
@@ -62,16 +92,9 @@ nome curto (`/osceia`) pode linkar a pasta em `~/.claude/skills/`:
 ln -s ~/.agents/skills/osceia ~/.claude/skills/osceia
 ```
 
-### Atualizar
+### Skills disponíveis
 
-```bash
-/plugin marketplace update skills-osceia
-claude plugin update <plugin>@skills-osceia
-```
-
-## Plugins disponíveis
-
-### Desenvolvimento OSCEIA
+#### Desenvolvimento OSCEIA
 
 | Plugin | O que faz |
 |---|---|
@@ -84,7 +107,7 @@ claude plugin update <plugin>@skills-osceia
 | `markitdown-local` | Converte PDF, DOCX, PPTX, XLSX, MSG e HTML locais em Markdown, com o MarkItDown da Microsoft |
 | `md-to-pdf` | Converte Markdown em PDF com cabeçalho, rodapé, numeração de páginas e CSS próprio |
 
-### Escrita e ensino
+#### Escrita e ensino
 
 | Plugin | O que faz |
 |---|---|
@@ -95,7 +118,7 @@ claude plugin update <plugin>@skills-osceia
 | `writing-fragments` | Sessão de perguntas que extrai fragmentos de texto como matéria-prima para um artigo |
 | `writing-shape` | Transforma notas e rascunhos em artigo publicável, parágrafo a parágrafo |
 
-### Fluxo de engenharia
+#### Fluxo de engenharia
 
 | Plugin | O que faz |
 |---|---|
@@ -125,20 +148,36 @@ claude plugin update <plugin>@skills-osceia
 | `ubiquitous-language` | Extrai um glossário de linguagem ubíqua (DDD) da conversa, sinalizando ambiguidades |
 | `zoom-out` | Pede ao agente uma visão mais ampla de uma área de código desconhecida |
 
-### Criar e achar skills
+#### Criar e achar skills
 
 | Plugin | O que faz |
 |---|---|
 | `find-skills` | Descobre e instala skills quando você pergunta "existe uma skill para X?" |
 | `write-a-skill` | Cria skills novas com estrutura correta e recursos empacotados |
 
-### Outros
+#### Outros
 
 | Plugin | O que faz |
 |---|---|
 | `defuddle` | Extrai Markdown limpo de páginas web, sem navegação nem ruído, para gastar menos tokens |
 
-### Mods do Claude Code
+## Plugins (mods do Claude Code)
+
+### Instalar um mod
+
+```bash
+claude plugin install osceia-chat@skills-osceia --scope user
+```
+
+### Instalar todos os mods
+
+```bash
+for p in educa-lateral osceia-chat usage-line; do
+  claude plugin install "$p@skills-osceia" --scope user
+done
+```
+
+### Mods disponíveis
 
 | Plugin | O que faz |
 |---|---|
@@ -146,7 +185,7 @@ claude plugin update <plugin>@skills-osceia
 | `osceia-chat` | Tema OSCEIA e chat com respiro entre as mensagens |
 | `usage-line` | Linha de status com modelo, branch, contexto, limites 5h/7d, custo e cache |
 
-#### Mod `educa-lateral`
+### Mod `educa-lateral`
 
 Painel à direita (~40% do terminal) que explica, em textos curtos, as tecnologias escolhidas enquanto algo é
 desenvolvido. Detalhes em [`educa-lateral/README.md`](./educa-lateral/README.md).
@@ -155,7 +194,7 @@ desenvolvido. Detalhes em [`educa-lateral/README.md`](./educa-lateral/README.md)
 claude plugin install educa-lateral@skills-osceia --scope user
 ```
 
-#### Mod `osceia-chat`
+### Mod `osceia-chat`
 
 Tema **OSCEIA Chat** (azul-marinho `#101840`, verde `#00CA6A` e dourado `#FBC26E`, as cores do site) e chat com
 respiro: linha em branco entre as mensagens, texto recuado sob o marcador `●` e a mensagem da pessoa em bloco
@@ -167,7 +206,7 @@ claude plugin install osceia-chat@skills-osceia --scope user
 
 O mascote do Claude Code é recolorido (verde sobre azul-marinho), mas a imagem em si não pode ser trocada por um mod.
 
-#### Mod `usage-line`
+### Mod `usage-line`
 
 Linha de status compacta com o consumo da sessão: modelo, branch, barras de contexto e dos limites 5h/7d, custo e
 estado do cache de prompt. Detalhes em [`usage-line/README.md`](./usage-line/README.md).
