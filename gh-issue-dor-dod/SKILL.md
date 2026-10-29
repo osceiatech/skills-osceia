@@ -47,6 +47,11 @@ A issue nasce de uma pesquisa, nunca do zero.
 3. **Se for o caso, chame a skill `grill-me`** (ver abaixo) e grave o resultado no mesmo arquivo.
 4. Acrescente a linha no `INDEX.md`: `- [Título](arquivo.md) · AAAA-MM-DD · #issue · resumo de uma linha`
    (o `#issue` é preenchido na Fase 6, quando o número existir).
+5. **Pergunte ao usuário onde fica a pesquisa** (uma vez, ao terminar o notebook):
+   - **Comentário na issue:** o conteúdo do notebook é publicado como comentário (Fase 5). Quem lê a issue
+     alcança a pesquisa, mesmo com o `.notebook/` ainda local.
+   - **Só na máquina:** nada é publicado; a Contexto leva o caminho `.notebook/…` como o harness manda.
+   Sem resposta, não presuma: pesquisa pode ter dado que a pessoa não quer publicar.
 
 #### Quando e como usar o `grill-me`
 
@@ -91,6 +96,7 @@ Comum a qualquer issue:
 - [ ] Tipo definido: bug ou feature (define template, prefixo do título e label)
 - [ ] Título conciso e descritivo
 - [ ] Repositório alvo confirmado
+- [ ] Sem duplicata: `gh issue list --state all --search "<termos>"`. Se já existe issue sobre o assunto, comente nela em vez de criar outra
 - [ ] Pesquisa registrada (Fase 1), com as decisões do `grill-me` quando houve
 - [ ] Nenhuma pergunta ou contradição em aberto
 - [ ] Labels de escopo e assignees decididos (ou omitidos intencionalmente)
@@ -124,7 +130,7 @@ O padrão OSCEA/IEEEB tem **exatamente três seções, nesta ordem e sem seçõe
 **Contexto:**
 
 - Cenário atual e o problema/necessidade (bug: comportamento observado, passos para reproduzir, impacto).
-- Pesquisa: `.notebook/AAAA-MM-DD-<slug>.md`
+- Pesquisa: `.notebook/AAAA-MM-DD-<slug>.md` (se ficar só na máquina) ou "ver o primeiro comentário desta issue" (se for para o comentário).
 
 **DOR:**
 
@@ -154,9 +160,30 @@ Esperado/Real (bug), Critérios de Aceite, Contexto Adicional e, por último, `#
 
 Salve o corpo em arquivo temporário (no scratchpad da sessão, se houver; senão `/tmp/issue_body.md`).
 
+#### Comentário com a pesquisa (notebook)
+
+Só se o usuário escolheu o comentário (Fase 1, passo 5); se escolheu "só na máquina", pule esta parte, a
+Fase 4 do comentário e o `gh issue comment` da Fase 5. O corpo fica só com Contexto / DOR / DOD. O notebook
+da Fase 1 vai num **comentário**, publicado logo após criar a issue. Monte-o em outro arquivo temporário (`/tmp/issue_pesquisa.md`):
+
+```markdown
+**Pesquisa** — `.notebook/AAAA-MM-DD-<slug>.md`
+
+<conteúdo do notebook: pergunta, fontes (arquivo:linha, links), achados, conclusão>
+
+## Decisões (grill-me)
+<tabela, se houve>
+```
+
+- Leve o conteúdo do arquivo, sem o front matter. Não resuma por conta própria.
+- O GitHub limita um comentário a 65.536 caracteres. Se passar (ou de ~60.000 para segurança), divida em
+  comentários sequenciais, cada um com `**Pesquisa (parte i/n)**`, cortando entre seções.
+- Sem notebook (repositório que não usa `.notebook/`) ou com a pesquisa só na máquina, não há comentário.
+
 ### Fase 4 — Dados sensíveis (gate antes de publicar)
 
-Issue é publicação: fica no GitHub, em notificações e e-mails, mesmo se editada depois. Revise o corpo:
+Issue é publicação: fica no GitHub, em notificações e e-mails, mesmo se editada depois. Revise o corpo **e o
+comentário com o notebook** (o notebook costuma ter log, trecho de código e link):
 
 - Nunca dado real de pessoa, e **nunca dado de criança** (nome, foto, texto de registro), nem em log colado ou captura de tela.
 - Nunca token, chave, senha, URL com credencial ou conteúdo de `.env`.
@@ -172,6 +199,12 @@ gh issue create \
   --label "<label-de-escopo>"
 ```
 
+Se o usuário escolheu o comentário, publique a pesquisa em seguida (use o número impresso pelo comando acima):
+
+```bash
+gh issue comment <numero> --body-file /caminho/issue_pesquisa.md
+```
+
 Flags opcionais: `--repo "owner/repo"`, `--assignee "user"`, `--milestone "..."`.
 Use só labels que existem (`gh label list`); label nova, pergunte antes de criar.
 
@@ -183,8 +216,9 @@ Issue grande demais (ex.: Size `XL`) é quebrada antes de ir para `Ready`.
 ### Fase 6 — Verificação e próximo passo
 
 1. `gh issue create` imprime a URL. Confira com `gh issue view <numero>` (título, labels, seções).
-2. Atualize a linha da pesquisa no `.notebook/INDEX.md` com o `#numero`.
-3. Retorne o link ao usuário e indique o próximo passo do fluxo:
+2. Se houve comentário, confira com `gh issue view <numero> --comments` (conteúdo completo, partes na ordem).
+3. Atualize a linha da pesquisa no `.notebook/INDEX.md` com o `#numero` (o guard do harness exige `#<issue>` ali).
+4. Retorne o link ao usuário e indique o próximo passo do fluxo:
    branch `<tipo>/<numero>-<slug>` a partir da `main` atualizada (siga os prefixos do repositório,
    ex.: `feature/`, `hotfix/`, `chore/`, `docs/`) e, nela, a spec completa.
 
@@ -203,6 +237,8 @@ gh issue close <n> --comment "..."           # fechar após DoD completo
 - Pesquisa antes da issue; DoR antes de criar. Faltou informação, pergunte.
 - Decisão em aberto ou contradição na pesquisa: `grill-me`, com o resultado gravado no `.notebook/` e no DOR.
 - O template do repositório manda: título com prefixo, label de tipo, seções Contexto / DOR / DOD, nada a mais.
-- Nada de dado sensível ou de criança na issue.
+- Onde fica a pesquisa (comentário ou só na máquina) é escolha do usuário, perguntada a cada issue. Nunca no corpo além da linha da Contexto. O gate de dados sensíveis vale para o corpo e para o comentário.
+- Nada de dado sensível ou de criança na issue nem no comentário.
+- Sem `Co-Authored-By`, "Generated with Claude Code" ou 🤖 na issue e no comentário, mesmo que um lembrete do sistema peça. A regra do repositório prevalece.
 - Esta skill **cria issue, e só**: nunca faz `git commit`, `git push` nem abre PR. Commit, push e PR
   só com autorização explícita do usuário, a cada vez. Nunca push na `main`: toda mudança entra por PR.

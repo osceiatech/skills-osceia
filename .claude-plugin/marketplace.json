@@ -145,7 +145,7 @@
       "name": "gh-issue-dor-dod",
       "source": "./gh-issue-dor-dod",
       "description": "Cria e gerencia issues no GitHub via CLI gh, aplicando checklists de Definition of Ready (DoR) e Definition of Done (DoD) e o template de issue do repositório. Use SEMPRE que o usuário pedir para reportar um bug, abrir uma tarefa, criar...",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "category": "osceia-dev",
       "strict": false,
       "skills": [
