@@ -17,6 +17,10 @@ repo=$(basename "$root")
 projeto=$(echo "${repo#osceia-}" | sed 's/./\u&/')
 workflow=$(cd .github/workflows 2>/dev/null && ls azure-static-web-apps-*.yml 2>/dev/null | head -1 || true)
 workflow="${workflow:-azure-static-web-apps-<ID>.yml}"
+# Versionamento (references/versionamento.md): versão atual, commit de partida do changelog e arquivo de versão do app
+versao=$(jq -r '.version // "0.0.0"' package.json 2>/dev/null || echo 0.0.0)
+bootstrap_sha=$(git rev-parse --verify -q origin/main 2>/dev/null || git rev-parse --verify -q HEAD 2>/dev/null || true)
+if [[ "$(osceia_stack)" == angular ]]; then arquivo_versao=src/app/core/versao.ts; else arquivo_versao=src/versao.ts; fi
 
 missing=()
 while IFS= read -r -d '' f; do
@@ -41,7 +45,9 @@ for rel in "${missing[@]}"; do
       printf '# .notebook\n> Project intelligence — read before every mission\n\nLast updated: %s\n' "$(date +%F)" > "$rel" ;;
     *)
       mkdir -p "$(dirname "$rel")"
-      sed -e "s#{{PROJETO}}#$projeto#g" -e "s#{{REPO}}#$repo#g" -e "s#{{WORKFLOW_AZURE}}#$workflow#g" "$tpl/$rel" > "$rel"
+      sed -e "s#{{PROJETO}}#$projeto#g" -e "s#{{REPO}}#$repo#g" -e "s#{{WORKFLOW_AZURE}}#$workflow#g" \
+          -e "s#{{VERSAO}}#$versao#g" -e "s#{{BOOTSTRAP_SHA}}#$bootstrap_sha#g" -e "s#{{ARQUIVO_VERSAO}}#$arquivo_versao#g" \
+          "$tpl/$rel" > "$rel"
       [[ "$rel" == .githooks/* ]] && chmod +x "$rel" ;;
   esac
 done
@@ -53,8 +59,17 @@ if [[ -f package.json ]] && command -v jq >/dev/null; then
     tmp=$(mktemp); jq '.scripts.prepare="node scripts/instalar-hooks.mjs" | .scripts.carimbo="node scripts/carimbo.mjs mostrar"' package.json > "$tmp" && mv "$tmp" package.json
     echo "package.json: scripts prepare e carimbo adicionados."
   fi
+  if [[ -z "$(jq -r '.scripts["release:pr"] // empty' package.json)" ]]; then
+    tmp=$(mktemp); jq '.scripts["release:pr"]="node scripts/release.mjs"' package.json > "$tmp" && mv "$tmp" package.json
+    echo "package.json: script release:pr adicionado."
+  fi
 else
-  pendencias+=("adicionar em package.json: \"prepare\": \"node scripts/instalar-hooks.mjs\" e \"carimbo\": \"node scripts/carimbo.mjs mostrar\"")
+  pendencias+=("adicionar em package.json: \"prepare\": \"node scripts/instalar-hooks.mjs\", \"carimbo\": \"node scripts/carimbo.mjs mostrar\" e \"release:pr\": \"node scripts/release.mjs\"")
+fi
+if printf '%s\n' "${missing[@]}" | grep -qx 'release-please-config.json'; then
+  [[ -n "$bootstrap_sha" ]] || pendencias+=("release-please-config.json: preencher bootstrap-sha (sem commit na origin/main)")
+  pendencias+=("versionamento: criar $arquivo_versao e mostrar a versão na tela (references/versionamento.md)")
+  [[ "$versao" == 0.* ]] && pendencias+=("versionamento: projeto já em produção? mergear o PR que traz o versionamento com --body \"Release-As: 1.0.0\"")
 fi
 if git rev-parse --git-dir >/dev/null 2>&1; then
   git config core.hooksPath .githooks && echo "git: core.hooksPath = .githooks"
