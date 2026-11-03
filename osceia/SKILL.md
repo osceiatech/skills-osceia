@@ -37,6 +37,7 @@ Para templates, exemplos e detalhes, consulte os arquivos em `references/`:
 - `references/structure.md` — Estrutura de pastas, nomenclatura, checklist de PR
 - `references/governance-hooks.md` — Hooks do Claude Code para as regras de governança (`hooks/`)
 - `references/primeng-migration.md` — Plano de saída do PrimeNG: estado por projeto e equivalentes
+- `references/versionamento.md` — SemVer, release-please, `npm run release:pr` e a versão na tela
 - `templates/harness/` — Arquivos do harness (`.agents/`, `.githooks/`, `.github/`, `scripts/`, `.claude/`, `AGENTS.md`) copiados pelo bootstrap
 
 ---
@@ -55,7 +56,7 @@ outra ação:
    Angular só valem em Angular, `any` e LGPD valem também em React). Reportar ao usuário cada
    etapa que falhou. Para corrigir o harness: `bash ${CLAUDE_SKILL_DIR}/hooks/bootstrap-harness.sh --check`.
    Se faltar algo, rodar sem `--check`: ele cria só o que não existe (nunca sobrescreve),
-   a partir de `templates/harness/`, adiciona `prepare`/`carimbo` ao `package.json`, liga
+   a partir de `templates/harness/`, adiciona `prepare`/`carimbo`/`release:pr` ao `package.json`, liga
    o `core.hooksPath` e lista as pendências manuais (workflow Azure, repositório e comandos
    no `harness.config`). Cumprir as pendências ou avisar o usuário. Opcionalmente rodar
    `hooks/sync-harness.sh` para ver se guard, hooks git e `ci.yml` divergem dos templates.
@@ -336,6 +337,9 @@ Todo projeto ou feature nova segue este fluxo, sem pular etapas:
    `npm run build`) antes e depois de cada uma. **Nunca na `main`.**
 7. **Entrega** — o agente não commita/pusha/abre PR: entrega à pessoa o bloco de comandos
    pronto (commit, push, `gh pr create`, checks, merge) com o resultado real da verificação.
+   O bloco termina com `npm run release:pr`, que abre ou atualiza o PR de release (versão SemVer
+   e `CHANGELOG.md`); mergear esse PR é lançar a versão (`references/versionamento.md`).
+   `gh pr create` não tem `--no-draft`: Ready for review é sem flag.
 
 Toda pesquisa vai para `.notebook/AAAA-MM-DD-<slug>.md` (+ linha em `.notebook/INDEX.md`
 com `#<issue>`), sem dado pessoal real, token ou credencial. Dúvidas em aberto na pesquisa

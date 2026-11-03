@@ -18,7 +18,7 @@ eles só avisavam.
 | Script | Evento | O que faz |
 |---|---|---|
 | `session-start.sh` | `SessionStart` | Em pasta com `angular.json`, manda o Claude invocar a skill `osceia`, repassar o contexto (projeto, branch, passo do fluxo) e criar o que faltar do harness |
-| `bootstrap-harness.sh [--check] [raiz]` | manual / pela skill | Cria, **sem sobrescrever**, os arquivos do harness a partir de `templates/harness/`; adiciona `prepare`/`carimbo` ao `package.json`; liga `core.hooksPath`; lista pendências manuais |
+| `bootstrap-harness.sh [--check] [raiz]` | manual / pela skill | Cria, **sem sobrescrever**, os arquivos do harness a partir de `templates/harness/`; adiciona `prepare`/`carimbo`/`release:pr` ao `package.json`; liga `core.hooksPath`; lista pendências manuais |
 | `sync-harness.sh [--apply] [raiz]` | manual | Mostra (ou aplica) divergências dos arquivos de enforcement idênticos entre projetos (guard, carimbo, hooks git, ci.yml, templates de issue). Nunca toca em `harness.config`, `AGENTS.md` nem no template de PR |
 
 ### Instalar pelo marketplace (recomendado)
@@ -58,7 +58,8 @@ Mescle com os hooks já existentes (ex.: RTK em `PreToolUse`/`Bash`); não subst
 
 ## Harness do projeto (bloqueante)
 
-Arquivos em `templates/harness/` (placeholders: `{{PROJETO}}`, `{{REPO}}`, `{{WORKFLOW_AZURE}}`):
+Arquivos em `templates/harness/` (placeholders: `{{PROJETO}}`, `{{REPO}}`, `{{WORKFLOW_AZURE}}`, `{{VERSAO}}`,
+`{{BOOTSTRAP_SHA}}`, `{{ARQUIVO_VERSAO}}`):
 
 | Arquivo | Função |
 |---|---|
@@ -70,7 +71,10 @@ Arquivos em `templates/harness/` (placeholders: `{{PROJETO}}`, `{{REPO}}`, `{{WO
 | `scripts/carimbo.mjs` | Gera/confere `refs/verificacoes/<sha>` |
 | `scripts/instalar-hooks.mjs` | `npm install` → `core.hooksPath .githooks` |
 | `.claude/settings.json` | PreToolUse: bloqueia Edit/Write fora do fluxo |
-| `.github/workflows/ci.yml` | Confere carimbo, checklist e `Closes #<issue>` (não roda testes) |
+| `.github/workflows/ci.yml` | Confere carimbo, checklist e `Closes #<issue>` (não roda testes); pula a branch `release-please--*` |
+| `scripts/release.mjs` | `npm run release:pr`: abre/atualiza o PR de release com o login do `gh` (`references/versionamento.md`) |
+| `.github/workflows/release-please.yml` | Ao mergear o PR de release, cria a tag `vX.Y.Z` e o GitHub Release (não abre PR) |
+| `release-please-config.json`, `.release-please-manifest.json` | Configuração do versionamento, por projeto (o sync não compara) |
 | `.github/ISSUE_TEMPLATE/*`, `PULL_REQUEST_TEMPLATE.md`, `git-commit-instructions.md` | Formatos obrigatórios |
 | `AGENTS.md`, `.claude/CLAUDE.md` | Regras Angular + ponteiro para o harness |
 
