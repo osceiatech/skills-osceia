@@ -10,6 +10,9 @@ on:
 
 jobs:
   checar-pr:
+    # O PR de release do release-please (`npm run release:pr`) só muda versão e changelog, e os PRs que ele agrupa já
+    # passaram pela verificação: fica "skipped", não vermelho. Todos os outros PRs seguem conferidos.
+    if: ${{ !startsWith(github.head_ref, 'release-please--') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read

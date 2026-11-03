@@ -1,0 +1,24 @@
+name: Release
+
+# Versionamento SemVer (skill osceia, references/versionamento.md). O PR de release ("chore: release X.Y.Z") NÃO é
+# aberto aqui: a pessoa roda `npm run release:pr` depois de cada merge (scripts/release.mjs, com o login do gh), porque
+# a organização não permite que o Actions abra PR. Este workflow só cria a tag vX.Y.Z e o GitHub Release quando o PR
+# de release é mergeado na main. Regra de numeração: .github/git-commit-instructions.md. Não publica nada.
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+          skip-github-pull-request: true
