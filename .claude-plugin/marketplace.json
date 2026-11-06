@@ -14,11 +14,7 @@
       "source": "./osceia",
       "description": "Padrões Angular/React da OSCEA, harness de governança (hooks, guard, CI), ciclo de verificação e fluxo do levantamento ao deploy. Já traz o hook de início de sessão.",
       "version": "1.3.0",
-      "category": "osceia-dev",
-      "strict": false,
-      "skills": [
-        "./"
-      ]
+      "category": "osceia-dev"
     },
     {
       "name": "authenticated-web-system-reverse-engineering",
