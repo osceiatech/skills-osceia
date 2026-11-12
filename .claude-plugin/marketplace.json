@@ -482,7 +482,7 @@
       "name": "educa-lateral",
       "source": "./educa-lateral",
       "description": "Mod do Claude Code: painel lateral (~40% do terminal) que explica, em textos curtos, as tecnologias escolhidas enquanto algo é desenvolvido.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "category": "mods"
     },
     {
