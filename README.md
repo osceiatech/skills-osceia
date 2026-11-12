@@ -123,6 +123,7 @@ ln -s ~/.agents/skills/osceia ~/.claude/skills/osceia
 | Plugin | O que faz |
 |---|---|
 | `codenavi` | Investiga código desconhecido, implementa com cirurgia e mantém uma base `.notebook/` entre sessões |
+| `commit-osceia` | Faz commits atômicos, empurra a branch e abre o PR, sem nunca creditar o Claude como coautor |
 | `council` | Conselho de 6 conselheiros com lentes opostas para decisões reais, sem validação automática |
 | `cyclomatic-complexity` | Mede e refatora complexidade ciclomática em Angular/TypeScript, com config de ESLint e testes |
 | `design-an-interface` | Gera várias interfaces radicalmente diferentes para um módulo, com sub-agentes em paralelo |
