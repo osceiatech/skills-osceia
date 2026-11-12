@@ -50,6 +50,17 @@
       ]
     },
     {
+      "name": "commit-osceia",
+      "source": "./commit-osceia",
+      "description": "Faz commits atômicos, empurra a branch e abre o Pull Request, sem nunca creditar o Claude/IA como coautor. Use quando o usuário pedir para commitar, abrir PR ou finalizar a entrega.",
+      "version": "1.0.0",
+      "category": "engineering-workflow",
+      "strict": false,
+      "skills": [
+        "./"
+      ]
+    },
+    {
       "name": "council",
       "source": "./council",
       "description": "Conselho de decisão anti-sycophancy. Quando você precisa bater o martelo em uma decisão real e quer perspectivas honestas — não validação —, invoque o conselho. O modelo spawna 6 conselheiros independentes com lentes opostas, faz...",
@@ -471,7 +482,7 @@
       "name": "educa-lateral",
       "source": "./educa-lateral",
       "description": "Mod do Claude Code: painel lateral (~40% do terminal) que explica, em textos curtos, as tecnologias escolhidas enquanto algo é desenvolvido.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "category": "mods"
     },
     {
